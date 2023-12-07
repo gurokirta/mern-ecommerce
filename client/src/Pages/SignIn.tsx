@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "../index.css";
 
 export default function SignIn() {
   return (
@@ -44,7 +43,7 @@ export default function SignIn() {
                 type="checkbox"
                 className=""
               />
-              <p>Remember me</p>
+              <p className="text-neutral-04">Remember me</p>
             </div>
             <Link
               to={"/sign-in"}
@@ -54,7 +53,7 @@ export default function SignIn() {
             </Link>
           </div>
         </div>
-        <button className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s">
+        <button className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10">
           Sign In
         </button>
       </div>
