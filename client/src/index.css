@@ -2,4 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #fff;
+}
 
+.image {
+  background-image: url(./assets/chair.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 23rem;
+  height: 26rem;
+}
+
+@media (min-width: 640px) {
+  .image {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}

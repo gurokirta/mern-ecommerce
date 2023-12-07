@@ -185,16 +185,5 @@ export default {
       },
     },
   },
-  plugins: [
-    function ({ addUtilities }) {
-      const newUtilities = {
-        ".btn-xl": {},
-        ".btn-l": {},
-        ".btn-m": {},
-        ".btn-s": {},
-        ".btn-xs": {},
-      };
-      addUtilities(newUtilities);
-    },
-  ],
+  plugins: [],
 };
