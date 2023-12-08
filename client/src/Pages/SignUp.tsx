@@ -1,10 +1,77 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { useFormik, Formik } from "formik";
+
+const validationSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Name is required")
+    .max(18, "Please enter max 18 characters only")
+    .min(3, "Please enter min 3 characters"),
+  username: yup
+    .string()
+    .required("Username is required")
+    .min(4, "Please enter min 4 characters")
+    .max(18, "Please enter max 18 characters"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email address is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .max(18, "Please enter max 18 character")
+    .min(8, "Please enter min 8 characters"),
+});
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const { values, errors, handleChange, handleSubmit } = useFormik<UserSchema>({
+    initialValues: {
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: async (values: UserSchema) => {
+      try {
+        const res = await fetch("/api/user/sign-up", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+
+        const data = await res.json();
+        console.log(data);
+        console.log(errors.email);
+        if (data.success === false) {
+          console.log(data.message);
+          return;
+        }
+        navigate("/sign-in");
+      } catch (error) {
+        console.log(errors);
+      }
+    },
+  });
+
+  const [error, setError] = useState(true);
   return (
-    <div className="max-w-xs sm:max-w-5xl flex flex-col gap-10 sm:flex-row mx-auto">
-      <div className="image sm:w-[536px] sm:h-screen flex justify-center pt-8 text-center text-2xl font-medium">
-        <h2>GG Commerce</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-xs sm:max-w-5xl flex flex-col gap-10 sm:flex-row mx-auto"
+    >
+      <div className="image sm:w-[536px] sm:h-screen flex justify-center pt-8 ">
+        <Link
+          to={"/"}
+          className="text-center text-2xl font-medium h-fit"
+        >
+          GG Commerce
+        </Link>
       </div>
       <div className="flex flex-col gap-8 sm:w-[28rem] justify-center w-[368px]">
         <div className="flex flex-col gap-6">
@@ -19,33 +86,92 @@ export default function SignUp() {
             </Link>
           </p>
         </div>
-        <div className="flex flex-col gap-8 relative ">
-          <input
-            type="text"
-            placeholder="Enter Name"
-            className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05"
-          />
-          <input
-            type="text"
-            placeholder="Enter your username"
-            className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05"
-          />
-          <input
-            type="text"
-            placeholder="Enter your Email Address"
-            className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05"
-          />
-
-          <input
-            type="text"
-            placeholder="Password"
-            className="border-b border-b-neutral-04 pb-2 focus:outline-none text-regular-05"
-          />
-          <img
-            src="./assets/eye.svg"
-            className="text-primary w-6 z-10 absolute bottom-[62px] right-0"
-            alt="eye"
-          />
+        <div className="flex flex-col gap-8">
+          <div className="relative">
+            <input
+              value={values.name}
+              name="name"
+              onChange={handleChange}
+              id="name"
+              type="text"
+              placeholder="Enter your name"
+              className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
+            />
+            <label
+              htmlFor="name"
+              className="absolute left-0 -top-5 text-regular-07 text-neutral-04 peer-placeholder-shown:text-regular-05 peer-placeholder-shown:text-neutral-04 peer-placeholder-shown:top-[0.5px] transition-all"
+            >
+              Enter your name
+            </label>
+            {values.name.length > 0 && errors.name ? <p>{errors.name}</p> : ""}
+          </div>
+          <div className="relative">
+            <input
+              value={values.username}
+              onChange={handleChange}
+              name="username"
+              id="username"
+              type="text"
+              placeholder="Enter your username"
+              className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
+            />
+            <label
+              htmlFor="username"
+              className="absolute left-0 -top-5 text-regular-07 text-neutral-04 peer-placeholder-shown:text-regular-05 peer-placeholder-shown:text-neutral-04 peer-placeholder-shown:top-[0.5px] transition-all"
+            >
+              Enter your username
+            </label>
+            {values.username.length > 0 && errors.username ? (
+              <p>{errors.username}</p>
+            ) : (
+              ""
+            )}
+          </div>
+          <div className="relative">
+            <input
+              value={values.email}
+              onChange={handleChange}
+              name="email"
+              id="email"
+              type="text"
+              placeholder="Enter your Email Address"
+              className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
+            />
+            <label
+              htmlFor="email"
+              className="absolute left-0 -top-5 text-regular-07 text-neutral-04 peer-placeholder-shown:text-regular-05 peer-placeholder-shown:text-neutral-04 peer-placeholder-shown:top-[0.5px] transition-all"
+            >
+              Enter your Email Address
+            </label>
+            {values.email.length > 0 && errors.email ? <p>{errors.email}</p> : ""}
+          </div>
+          <div className="relative">
+            <input
+              value={values.password}
+              onChange={handleChange}
+              name="password"
+              id="password"
+              type="text"
+              placeholder="Password"
+              className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
+            />
+            <label
+              htmlFor="password"
+              className="absolute left-0 -top-5 text-regular-07 text-neutral-04 peer-placeholder-shown:text-regular-05 peer-placeholder-shown:text-neutral-04 peer-placeholder-shown:top-[0.5px] transition-all"
+            >
+              Password
+            </label>
+            {values.password.length > 0 && errors.password ? (
+              <p>{errors.password}</p>
+            ) : (
+              ""
+            )}
+            <img
+              src="./assets/eye.svg"
+              className="text-primary w-6 z-10 absolute bottom-[5px] right-0"
+              alt="eye"
+            />
+          </div>
 
           <div className="flex justify-between items-center">
             <div className="flex gap-2">
@@ -61,10 +187,21 @@ export default function SignUp() {
             </div>
           </div>
         </div>
-        <button className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10">
+        <button
+          onClick={() => console.log(errors)}
+          type="submit"
+          className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10"
+        >
           Sign Up
         </button>
       </div>
-    </div>
+      <div
+        className={
+          !error
+            ? "border-2 rounded-xl w-6 h-6 border-secondary-red"
+            : "border-2 rounded-xl w-6 h-6 border-secondary-green"
+        }
+      ></div>
+    </form>
   );
 }

@@ -12,7 +12,7 @@ export default {
         orange: "#FFAB00",
         red: "#FF5630",
       },
-
+      transparent: "transparent",
       neutral: {
         "01": "#fefefe",
         "02": "#F3F5F7",
