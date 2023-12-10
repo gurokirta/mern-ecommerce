@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "../Redux/Store";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { signInFailed, signInStart, signInSuccess } from "../Redux/user/user.slice";
 
 const validationSchema = yup.object().shape({
   usernameOrEmail: yup
@@ -12,7 +15,8 @@ const validationSchema = yup.object().shape({
 });
 
 export default function SignIn() {
-  const [error, setError] = useState(null);
+  const { isError } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { values, errors, handleChange, handleSubmit } = useFormik<UserLoginSchema>({
@@ -23,6 +27,7 @@ export default function SignIn() {
     validationSchema,
     onSubmit: async (values: UserLoginSchema) => {
       try {
+        dispatch(signInStart());
         const res = await fetch("/api/auth/sign-in", {
           method: "POST",
           headers: {
@@ -33,10 +38,10 @@ export default function SignIn() {
         const data = await res.json();
 
         if (data.success === false) {
-          setError(data.message);
+          dispatch(signInFailed(data.message));
           return;
         }
-
+        dispatch(signInSuccess(data));
         navigate("/");
       } catch (error) {
         console.log(error);
@@ -131,7 +136,7 @@ export default function SignIn() {
             Sign In
           </button>
         </form>
-        {error ? <p className="text-secondary-red">{error}</p> : ""}
+        {isError ? <p className="text-secondary-red">{isError}</p> : ""}
       </div>
     </div>
   );
