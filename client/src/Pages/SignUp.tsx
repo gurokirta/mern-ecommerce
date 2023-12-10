@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { useFormik, Formik } from "formik";
+import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
   name: yup
@@ -37,7 +37,7 @@ export default function SignUp() {
     validationSchema,
     onSubmit: async (values: UserSchema) => {
       try {
-        const res = await fetch("/api/user/sign-up", {
+        const res = await fetch("/api/auth/sign-up", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -46,8 +46,6 @@ export default function SignUp() {
         });
 
         const data = await res.json();
-        console.log(data);
-        console.log(errors.email);
         if (data.success === false) {
           console.log(data.message);
           return;
@@ -61,10 +59,7 @@ export default function SignUp() {
 
   const [error, setError] = useState(true);
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-xs sm:max-w-5xl flex flex-col gap-10 sm:flex-row mx-auto"
-    >
+    <div className="max-w-xs sm:max-w-5xl flex flex-col gap-10 sm:flex-row mx-auto">
       <div className="image sm:w-[536px] sm:h-screen flex justify-center pt-8 ">
         <Link
           to={"/"}
@@ -86,7 +81,10 @@ export default function SignUp() {
             </Link>
           </p>
         </div>
-        <div className="flex flex-col gap-8">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-8"
+        >
           <div className="relative">
             <input
               value={values.name}
@@ -103,7 +101,11 @@ export default function SignUp() {
             >
               Enter your name
             </label>
-            {values.name.length > 0 && errors.name ? <p>{errors.name}</p> : ""}
+            {values.name.length > 0 && errors.name ? (
+              <p className="text-secondary-red">{errors.name}</p>
+            ) : (
+              ""
+            )}
           </div>
           <div className="relative">
             <input
@@ -122,7 +124,7 @@ export default function SignUp() {
               Enter your username
             </label>
             {values.username.length > 0 && errors.username ? (
-              <p>{errors.username}</p>
+              <p className="text-secondary-red">{errors.username}</p>
             ) : (
               ""
             )}
@@ -143,7 +145,11 @@ export default function SignUp() {
             >
               Enter your Email Address
             </label>
-            {values.email.length > 0 && errors.email ? <p>{errors.email}</p> : ""}
+            {values.email.length > 0 && errors.email ? (
+              <p className="text-secondary-red">{errors.email}</p>
+            ) : (
+              ""
+            )}
           </div>
           <div className="relative">
             <input
@@ -162,7 +168,7 @@ export default function SignUp() {
               Password
             </label>
             {values.password.length > 0 && errors.password ? (
-              <p>{errors.password}</p>
+              <p className="text-secondary-red">{errors.password}</p>
             ) : (
               ""
             )}
@@ -186,22 +192,14 @@ export default function SignUp() {
               </p>
             </div>
           </div>
-        </div>
-        <button
-          onClick={() => console.log(errors)}
-          type="submit"
-          className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10"
-        >
-          Sign Up
-        </button>
+          <button
+            type="submit"
+            className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10"
+          >
+            Sign Up
+          </button>
+        </form>
       </div>
-      <div
-        className={
-          !error
-            ? "border-2 rounded-xl w-6 h-6 border-secondary-red"
-            : "border-2 rounded-xl w-6 h-6 border-secondary-green"
-        }
-      ></div>
-    </form>
+    </div>
   );
 }

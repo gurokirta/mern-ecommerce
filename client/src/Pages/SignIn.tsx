@@ -1,6 +1,49 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { useFormik } from "formik";
+
+const validationSchema = yup.object().shape({
+  usernameOrEmail: yup
+    .string()
+    .required("Please enter your email or username")
+    .min(1),
+  password: yup.string().required("please enter your password").min(1),
+});
 
 export default function SignIn() {
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const { values, errors, handleChange, handleSubmit } = useFormik<UserLoginSchema>({
+    initialValues: {
+      usernameOrEmail: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: async (values: UserLoginSchema) => {
+      try {
+        const res = await fetch("/api/auth/sign-in", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+        const data = await res.json();
+
+        if (data.success === false) {
+          setError(data.message);
+          return;
+        }
+
+        navigate("/");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
   return (
     <div className="max-w-xs sm:max-w-5xl flex flex-col gap-10 sm:flex-row mx-auto">
       <div className="image sm:w-[536px] sm:h-screen flex justify-center pt-8 ">
@@ -24,16 +67,21 @@ export default function SignIn() {
             </Link>
           </p>
         </div>
-        <div className="flex flex-col gap-8">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-8"
+        >
           <div className="relative">
             <input
-              id="email"
+              id="usernameOrEmail"
               type="text"
-              placeholder="Enter your Email Address"
+              onChange={handleChange}
+              value={values.usernameOrEmail}
+              placeholder="Username or Email"
               className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
             />
             <label
-              htmlFor="email"
+              htmlFor="usernameOrEmail"
               className="absolute left-0 -top-5 text-regular-07 text-neutral-04 peer-placeholder-shown:text-regular-05 peer-placeholder-shown:text-neutral-04 peer-placeholder-shown:top-[0.5px] transition-all"
             >
               Username or Email
@@ -41,6 +89,8 @@ export default function SignIn() {
           </div>
           <div className="relative">
             <input
+              onChange={handleChange}
+              value={values.password}
               id="password"
               type="text"
               placeholder="Password"
@@ -74,10 +124,14 @@ export default function SignIn() {
               Forgot password ?
             </Link>
           </div>
-        </div>
-        <button className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10">
-          Sign In
-        </button>
+          <button
+            type="submit"
+            className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10"
+          >
+            Sign In
+          </button>
+        </form>
+        {error ? <p className="text-secondary-red">{error}</p> : ""}
       </div>
     </div>
   );
