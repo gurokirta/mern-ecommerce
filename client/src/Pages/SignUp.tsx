@@ -59,8 +59,8 @@ export default function SignUp() {
 
   const [error, setError] = useState(true);
   return (
-    <div className="max-w-xs sm:max-w-5xl flex flex-col gap-10 sm:flex-row mx-auto">
-      <div className="image sm:w-[536px] sm:h-screen flex justify-center pt-8 ">
+    <div className="max-w-xs sm:max-w-full flex flex-col gap-10 sm:flex-row mx-auto">
+      <div className="image sm:w-[46rem] sm:h-screen flex justify-center pt-8 ">
         <Link
           to={"/"}
           className="text-center text-2xl font-medium h-fit"
