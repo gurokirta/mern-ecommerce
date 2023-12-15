@@ -38,7 +38,12 @@ const navItems = [
 
 export default function Header() {
   const [items, setItems] = useState(navItems);
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+  const handleBurgerMenu = () => {
+    setIsOpen(prev => !prev);
+  };
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -54,11 +59,63 @@ export default function Header() {
   }, [location.pathname]);
 
   return (
-    <header className="flex items-center justify-between max-w-xs sm:min-w-full px-40 py-4">
-      <div className="">
-        <h1 className="text-regular-01 font-medium">GG Commerce</h1>
+    <header className="flex items-center justify-between sm:min-w-full px-40 py-4 mx-auto relative">
+      <div className="relative flex gap-4 items-center">
+        <div
+          onClick={() => handleBurgerMenu()}
+          className={`sm:hidden w-[3px] h-6 bg-primary border rotate-90 rounded-lg before:w-[3px] before:h-6 before:bg-primary before:border  before:rounded-lg before:absolute before:-right-2 before:-top-[1px] after:w-[3px] after:h-6 after:bg-primary after:border  after:rounded-lg after:absolute after:-left-2 after:-top-[1px]  ${
+            isOpen
+              ? "bg-transparent border-none after:-rotate-45  before:rotate-45 before:right-0 after:left-0 before:transition-all before:duration-200 before:ease-linear after:transition-all after:duration-200 after:ease-linear"
+              : "bg-primary border after:rotate-0  before:rotate-0 before:-right-2 after:-left-2 before:transition-all before:duration-200 before:ease-linear after:transition-all after:duration-200 after:ease-linear"
+          }`}
+        ></div>
+
+        <h1 className="text-regular-04 sm:text-regular-01 font-medium">
+          GG Commerce
+        </h1>
       </div>
-      <nav className="flex justify-between">
+
+      {isOpen && (
+        <nav
+          className={`absolute left-10 top-20 border p-4 ${
+            isOpen &&
+            "animate-fade-right animate-once animate-duration-200 animate-delay-100 animate-ease-linear"
+          } `}
+        >
+          <ul className="flex flex-col gap-8">
+            {items.map(navItem => (
+              <Link
+                to={navItem.item.link}
+                key={navItem.item.title}
+                className={`${
+                  navItem.item.activityStatus ? "text-primary" : "text-neutral-04"
+                } text-regular-06 font-medium`}
+              >
+                {navItem.item.title}
+              </Link>
+            ))}
+            <div className="flex flex-col gap-6">
+              <div className="block sm:hidden">
+                <img
+                  src="../assets/search02.svg"
+                  alt="search icon"
+                  className="w-5 h-5"
+                />
+              </div>
+              <div className="block sm:hidden">
+                <Link to={"/profile/account-details"}>
+                  <img
+                    src="../assets/user-circle.svg"
+                    alt="user icon"
+                    className="w-5 h-5"
+                  />
+                </Link>
+              </div>
+            </div>
+          </ul>
+        </nav>
+      )}
+      <nav className="hidden sm:flex">
         <ul className="flex gap-6">
           {items.map(navItem => (
             <Link
@@ -74,15 +131,15 @@ export default function Header() {
         </ul>
       </nav>
       <div className="flex gap-4">
-        <div>
+        <div className="hidden sm:block">
           <img
             src="../assets/search02.svg"
             alt="search icon"
             className="w-5 h-5"
           />
         </div>
-        <div>
-          <Link to={"/profile"}>
+        <div className="hidden sm:block">
+          <Link to={"/profile/account-details"}>
             <img
               src="../assets/user-circle.svg"
               alt="user icon"

@@ -7,6 +7,10 @@ import Product from "./Pages/Product";
 import Shop from "./Pages/Shop";
 import ContactUs from "./Pages/ContactUs";
 import Header from "./components/Header";
+import Account from "./components/Account";
+import Address from "./components/Address";
+import Wishlist from "./components/Wishlist";
+import Orders from "./components/Orders";
 
 function App() {
   return (
@@ -38,10 +42,29 @@ function App() {
             path="/contact-us"
             element={<ContactUs />}
           />
+
           <Route
             path="/profile"
             element={<Profile />}
-          />
+          >
+            <Route
+              path="/profile/account-details"
+              element={<Account />}
+            />
+
+            <Route
+              path="/profile/address"
+              element={<Address />}
+            />
+            <Route
+              path="/profile/wishlist"
+              element={<Wishlist />}
+            />
+            <Route
+              path="/profile/orders"
+              element={<Orders />}
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>
