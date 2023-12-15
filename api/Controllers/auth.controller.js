@@ -1,5 +1,5 @@
 import User from "../Models/User.model.js";
-import { errorHandler } from "../Utils/errorHandler.js";
+import { errorHandler } from "../Utils/error.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -24,7 +24,7 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
   const { usernameOrEmail, password } = req.body;
-  // $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+
   try {
     const validUser = await User.findOne({
       $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],

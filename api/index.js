@@ -1,7 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import authRouter from "./Routers/auth.router.js";
+import userRouter from "./Routers/user.router.js";
 
 const app = express();
 dotenv.config();
@@ -20,8 +22,10 @@ mongoose
   });
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
