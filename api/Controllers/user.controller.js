@@ -34,7 +34,7 @@ export const update = async (req, res, next) => {
     );
     const { password: pass, ...restInfo } = updatedUser._doc;
 
-    res.status(200).json(updatedUser._doc);
+    res.status(200).json(restInfo);
   } catch (error) {
     next(error);
   }
