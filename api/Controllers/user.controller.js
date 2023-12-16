@@ -3,35 +3,38 @@ import { errorHandler } from "../Utils/error.js";
 import bcryptjs from "bcryptjs";
 
 export const update = async (req, res, next) => {
+  const { firstName, secondName, email, profilePicture, oldPassword, newPassword } =
+    req.body;
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can only update your own account"));
   }
+
   try {
     const user = await User.findById(req.params.id);
-    if (req.body.oldPassword) {
-      const currentPassword = req.body.oldPassword;
-      const checkPasswords = bcryptjs.compareSync(currentPassword, user.password);
-      if (checkPasswords) {
-        user.password = currentPassword;
-      }
-      const updatedPassword = bcryptjs.hashSync(user.password);
 
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: {
-            name: req.body.firstName,
-            secondName: req.body.secondName,
-            displayName: req.body.displayName,
-            profilePicture: req.body.profilePicture,
-            password: updatedPassword,
-          },
+    const validatePassword = bcryptjs.compareSync(oldPassword, user.password);
+    if (!validatePassword)
+      return next(errorHandler(401, "Please enter your currently password"));
+
+    const updatedPassword = bcryptjs.hashSync(newPassword, 10);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          name: firstName,
+          secondName,
+          displayName,
+          profilePicture,
+          email,
+          password: updatedPassword,
         },
-        { new: true }
-      );
-      const { password, ...restInfo } = updatedUser._doc;
-      res.status(200).json(restInfo);
-    }
+      },
+      { new: true }
+    );
+    const { password: pass, ...restInfo } = updatedUser._doc;
+
+    res.status(200).json(updatedUser._doc);
   } catch (error) {
     next(error);
   }
