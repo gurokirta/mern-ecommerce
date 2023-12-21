@@ -1,11 +1,13 @@
+import { Link, useLocation, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+// import * as yup from "yup";
+// import { useFormik } from "formik";
 import { PiCameraLight } from "react-icons/pi";
-import { Link, useLocation, Route, Routes } from "react-router-dom";
+import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
 import Account from "../components/Account";
 import Wishlist from "../components/Wishlist";
 import Orders from "../components/Orders";
 import Address from "../components/Address";
-import { useEffect, useState } from "react";
-import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
 
 const profileInfo = [
   {
@@ -38,12 +40,29 @@ const profileInfo = [
   },
 ];
 
+// const validationSchema = yup.object().shape({
+//   firstName: yup.string().min(3, "Must be at least 3 characters"),
+//   secondName: yup.string().min(2, "Must be at least 2 characters"),
+//   displayName: yup
+//     .string()
+//     .min(6, "Must be at least 6 characters")
+//     .max(15, "Max 15 characters only"),
+//   email: yup.string().email("Invalid email"),
+//   currentPassword: yup.string().required().min(8, "at least 8 characters"),
+//   newPassword: yup.string().required().min(8, "at least 8 characters"),
+//   newPassword2: yup
+//     .string()
+//     .oneOf([yup.ref("newPassword"), ""], "Passwords must match"),
+// });
+
 export default function Profile() {
   const [profileItem, setProfileItem] = useState(profileInfo);
   const [dropDownTitle, setDropDownTitle] = useState("Account");
   const [isOpen, setIsOpen] = useState(false);
 
   const location = useLocation();
+  const params = useParams();
+
   const pathname = location.pathname;
 
   const handleDropDownName = (val: string) => {
@@ -65,13 +84,13 @@ export default function Profile() {
     case "/profile/account-details":
       componentToRender = <Account />;
       break;
-    case "/profile/address":
+    case "/profile/address/:id":
       componentToRender = <Address />;
       break;
-    case "/profile/wishlist":
+    case "/profile/wishlist/:id":
       componentToRender = <Wishlist />;
       break;
-    case "/profile/orders":
+    case "/profile/orders/:id":
       componentToRender = <Orders />;
       break;
     default:
@@ -92,7 +111,7 @@ export default function Profile() {
         <h1 className="sm:text-heading-03 text-heading-04">My Account</h1>
       </div>
       <section className="flex items-center sm:items-start sm:flex-row flex-col mt-20 ">
-        <aside className="sm:h-[30rem] w-[17.5rem] py-10 px-4 bg-neutral-02 rounded-lg flex flex-col ">
+        <aside className="sm:h-[30rem] w-[17.5rem] py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
           <div className="flex flex-col items-center justify-center mb-6">
             <div className="relative ">
               <img

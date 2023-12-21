@@ -1,13 +1,72 @@
 import React from "react";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../Redux/Store";
+import { updateFailed, updateStart, updateSuccess } from "../Redux/user/user.slice";
+
+const validationSchema = yup.object().shape({
+  firstName: yup.string().min(3, "Must be at least 3 characters"),
+  secondName: yup.string().min(2, "Must be at least 2 characters"),
+  displayName: yup
+    .string()
+    .min(6, "Must be at least 6 characters")
+    .max(15, "Max 15 characters only"),
+  email: yup.string().email("Invalid email"),
+  oldPassword: yup.string().required().min(8, "at least 8 characters"),
+  newPassword: yup.string().required().min(8, "at least 8 characters"),
+  newPassword2: yup
+    .string()
+    .oneOf([yup.ref("newPassword"), ""], "Passwords must match"),
+});
 
 export default function Account() {
+  const { isLoading, isError, currentUser } = useSelector(
+    (state: RootState) => state.user
+  );
+  const dispatch = useDispatch();
+  const { values, errors, handleChange, handleSubmit } = useFormik<UserSchema>({
+    initialValues: {
+      _id: 0,
+      firstName: "",
+      secondName: "",
+      displayName: "",
+      email: "",
+      oldPassword: "",
+      newPassword: "",
+      newPassword2: "",
+    },
+    validationSchema,
+    onSubmit: async (values: UserSchema) => {
+      try {
+        dispatch(updateStart());
+        const res = await fetch(`/api/user/update/${currentUser?._id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+        const data = await res.json();
+
+        if (data.success === false) {
+          dispatch(updateFailed(data.message));
+          return;
+        }
+        dispatch(updateSuccess(data));
+      } catch (error) {
+        dispatch(updateFailed(error));
+      }
+    },
+  });
+  console.log(errors);
   return (
     <>
       <h1 className="text-regular-03 font-semibold mb-6 mt-10 sm:mt-0">
         Account details
       </h1>
       <form
-        action=""
+        onSubmit={handleSubmit}
         className="flex flex-col w-[17.5rem] sm:w-[44rem]"
       >
         <div className="flex flex-col gap-6 w-full">
@@ -16,6 +75,9 @@ export default function Account() {
               first name *
             </label>
             <input
+              value={values.firstName}
+              id="firstName"
+              onChange={handleChange}
               type="text"
               placeholder="First name"
               className="border rounded-lg  h-10 px-4 text-regular-05 font-normal  sm:w-full"
@@ -26,6 +88,9 @@ export default function Account() {
               last name *
             </label>
             <input
+              value={values.secondName}
+              id="secondName"
+              onChange={handleChange}
               type="text"
               placeholder="Last name"
               className="border rounded-lg h-10 px-4 text-regular-05 font-normal   sm:w-full"
@@ -36,6 +101,9 @@ export default function Account() {
               email *
             </label>
             <input
+              value={values.email}
+              id="email"
+              onChange={handleChange}
               type="text"
               placeholder="Email"
               className="border rounded-lg h-10 px-4 text-regular-05 font-normal  sm:w-full"
@@ -46,6 +114,9 @@ export default function Account() {
               display name*
             </label>
             <input
+              value={values.displayName}
+              id="displayName"
+              onChange={handleChange}
               type="text"
               placeholder="Display name"
               className="border rounded-lg h-10 px-4 text-regular-05 font-normal  sm:w-full"
@@ -63,6 +134,9 @@ export default function Account() {
               old password *
             </label>
             <input
+              value={values.oldPassword}
+              id="oldPassword"
+              onChange={handleChange}
               type="text"
               placeholder="Old password"
               className="border rounded-lg h-10 px-4 text-regular-05 font-normal  sm:w-full"
@@ -73,6 +147,9 @@ export default function Account() {
               new password *
             </label>
             <input
+              value={values.newPassword}
+              id="newPassword"
+              onChange={handleChange}
               type="text"
               placeholder="New password"
               className="border rounded-lg h-10 px-4 text-regular-05 font-normal  sm:w-full"
@@ -83,6 +160,9 @@ export default function Account() {
               repeat password *
             </label>
             <input
+              value={values.newPassword2}
+              id="newPassword2"
+              onChange={handleChange}
               type="text"
               placeholder="Repeat password"
               className="border rounded-lg h-10 px-4 text-regular-05 font-normal  sm:w-full"

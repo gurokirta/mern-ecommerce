@@ -27,35 +27,36 @@ const validationSchema = yup.object().shape({
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { values, errors, handleChange, handleSubmit } = useFormik<UserSchema>({
-    initialValues: {
-      name: "",
-      username: "",
-      email: "",
-      password: "",
-    },
-    validationSchema,
-    onSubmit: async (values: UserSchema) => {
-      try {
-        const res = await fetch("/api/auth/sign-up", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
+  const { values, errors, handleChange, handleSubmit } =
+    useFormik<UserRegisterSchema>({
+      initialValues: {
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+      },
+      validationSchema,
+      onSubmit: async (values: UserRegisterSchema) => {
+        try {
+          const res = await fetch("/api/auth/sign-up", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          });
 
-        const data = await res.json();
-        if (data.success === false) {
-          console.log(data.message);
-          return;
+          const data = await res.json();
+          if (data.success === false) {
+            console.log(data.message);
+            return;
+          }
+          navigate("/sign-in");
+        } catch (error) {
+          console.log(errors);
         }
-        navigate("/sign-in");
-      } catch (error) {
-        console.log(errors);
-      }
-    },
-  });
+      },
+    });
 
   const [error, setError] = useState(true);
   return (

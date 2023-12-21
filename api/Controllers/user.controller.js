@@ -3,8 +3,15 @@ import { errorHandler } from "../Utils/error.js";
 import bcryptjs from "bcryptjs";
 
 export const update = async (req, res, next) => {
-  const { firstName, secondName, email, profilePicture, oldPassword, newPassword } =
-    req.body;
+  const {
+    firstName,
+    secondName,
+    email,
+    profilePicture,
+    oldPassword,
+    newPassword,
+    displayName,
+  } = req.body;
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can only update your own account"));
   }
