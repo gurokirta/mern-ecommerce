@@ -1,7 +1,12 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import * as yup from "yup";
-// import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signOutFailed,
+  signOutStart,
+  signOutSuccess,
+} from "../Redux/user/user.slice";
+import { RootState } from "../Redux/Store";
 import { PiCameraLight } from "react-icons/pi";
 import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
 import Account from "../components/Account";
@@ -40,28 +45,15 @@ const profileInfo = [
   },
 ];
 
-// const validationSchema = yup.object().shape({
-//   firstName: yup.string().min(3, "Must be at least 3 characters"),
-//   secondName: yup.string().min(2, "Must be at least 2 characters"),
-//   displayName: yup
-//     .string()
-//     .min(6, "Must be at least 6 characters")
-//     .max(15, "Max 15 characters only"),
-//   email: yup.string().email("Invalid email"),
-//   currentPassword: yup.string().required().min(8, "at least 8 characters"),
-//   newPassword: yup.string().required().min(8, "at least 8 characters"),
-//   newPassword2: yup
-//     .string()
-//     .oneOf([yup.ref("newPassword"), ""], "Passwords must match"),
-// });
-
 export default function Profile() {
+  const { isError, isLoading } = useSelector((state: RootState) => state.user);
   const [profileItem, setProfileItem] = useState(profileInfo);
   const [dropDownTitle, setDropDownTitle] = useState("Account");
   const [isOpen, setIsOpen] = useState(false);
 
   const location = useLocation();
-  const params = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const pathname = location.pathname;
 
@@ -77,6 +69,22 @@ export default function Profile() {
 
   const handleDropDown = () => {
     setIsOpen(prev => !prev);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutFailed(data.message));
+        return;
+      }
+      dispatch(signOutSuccess());
+      navigate("/sign-in");
+    } catch (error) {
+      dispatch(signOutFailed(error));
+    }
   };
 
   let componentToRender: React.ReactNode;
@@ -178,6 +186,7 @@ export default function Profile() {
             <div className="">
               <Link
                 to={"/"}
+                onClick={handleSignOut}
                 className="py-3 text-regular-04 font-semibold text-neutral-04"
               >
                 Log out

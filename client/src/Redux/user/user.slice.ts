@@ -28,6 +28,18 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.currentUser = action.payload;
     },
+    signOutStart: state => {
+      state.isLoading = true;
+    },
+    signOutFailed: (state, action) => {
+      state.isLoading = false;
+      state.isError = action.payload;
+    },
+    signOutSuccess: state => {
+      state.isLoading = false;
+      state.isError = null;
+      state.currentUser = null;
+    },
     updateStart: state => {
       state.isLoading = true;
     },
@@ -47,6 +59,9 @@ export const {
   signInStart,
   signInFailed,
   signInSuccess,
+  signOutStart,
+  signOutFailed,
+  signOutSuccess,
   updateStart,
   updateFailed,
   updateSuccess,
