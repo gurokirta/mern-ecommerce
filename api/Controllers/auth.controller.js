@@ -4,7 +4,7 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
-  const { name, username, password, email, profilePicture } = req.body;
+  const { name, username, password, email } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
     name,
@@ -41,6 +41,39 @@ export const signin = async (req, res, next) => {
     res.cookie("access_token", token, { httpOnly: true }).json(restInfo);
   } catch (error) {
     next(error);
+  }
+};
+
+export const google = async (req, res, next) => {
+  const { email, profilePicture, name, password, username } = req.body;
+  const user = await User.findOne({ email });
+  try {
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const { password: pass, ...restInfo } = user._doc;
+
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(restInfo);
+    } else {
+      const newUser = new User({
+        email,
+        name,
+        profilePicture,
+        password,
+        username,
+      });
+      await newUser.save();
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const { password: pass, ...restInfo } = newUser._doc;
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(restInfo);
+    }
+  } catch (error) {
+    next(errorHandler(500, error));
   }
 };
 

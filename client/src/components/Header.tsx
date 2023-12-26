@@ -78,8 +78,9 @@ export default function Header() {
       {isOpen && (
         <nav
           className={`absolute left-10 top-20 border p-4 ${
-            isOpen &&
-            "animate-fade-right animate-once animate-duration-200 animate-delay-100 animate-ease-linear"
+            isOpen
+              ? "animate-fade-right animate-once animate-duration-200 animate-delay-100 animate-ease-linear"
+              : "block opacity-0 transition-opacity animate-fade-left animate-delay-100 animate-ease-linear animate-duration-200"
           } `}
         >
           <ul className="flex flex-col gap-8">

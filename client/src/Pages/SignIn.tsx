@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../Redux/Store";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { signInFailed, signInStart, signInSuccess } from "../Redux/user/user.slice";
+import OAuth from "../components/oauth";
 
 const validationSchema = yup.object().shape({
   usernameOrEmail: yup
@@ -129,14 +129,17 @@ export default function SignIn() {
               Forgot password ?
             </Link>
           </div>
-          <button
-            type="submit"
-            className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10"
-          >
-            Sign In
-          </button>
+          <div className="flex flex-col items-center justify-between text-center gap-4">
+            <button
+              type="submit"
+              className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s w-full"
+            >
+              Sign In
+            </button>
+            <OAuth />
+          </div>
         </form>
-        {isError ? <p className="text-secondary-red">{isError}</p> : ""}
+        {/* {isError && <p className="text-secondary-red">{isError}</p>} */}
       </div>
     </div>
   );

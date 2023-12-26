@@ -35,6 +35,7 @@ export default function Account() {
       oldPassword: "",
       newPassword: "",
       newPassword2: "",
+      profilePicture: "",
     },
     validationSchema,
     onSubmit: async (values: UserSchema) => {
@@ -59,7 +60,7 @@ export default function Account() {
       }
     },
   });
-  console.log(errors);
+
   return (
     <>
       <h1 className="text-regular-03 font-semibold mb-6 mt-10 sm:mt-0">

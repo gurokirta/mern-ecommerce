@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import OAuth from "../components/oauth";
 
 const validationSchema = yup.object().shape({
   name: yup
@@ -193,12 +194,15 @@ export default function SignUp() {
               </p>
             </div>
           </div>
-          <button
-            type="submit"
-            className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s mb-10"
-          >
-            Sign Up
-          </button>
+          <div className="flex flex-col items-center justify-between text-center gap-4">
+            <button
+              type="submit"
+              className="bg-primary rounded-xl py-2 text-neutral-01 text-btn-s w-full"
+            >
+              Sign Up
+            </button>
+            <OAuth />
+          </div>
         </form>
       </div>
     </div>

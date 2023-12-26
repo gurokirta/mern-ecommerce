@@ -46,10 +46,14 @@ const profileInfo = [
 ];
 
 export default function Profile() {
-  const { isError, isLoading } = useSelector((state: RootState) => state.user);
+  const { isError, isLoading, currentUser } = useSelector(
+    (state: RootState) => state.user
+  );
   const [profileItem, setProfileItem] = useState(profileInfo);
   const [dropDownTitle, setDropDownTitle] = useState("Account");
   const [isOpen, setIsOpen] = useState(false);
+
+  console.log(currentUser?.profilePicture);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -92,13 +96,13 @@ export default function Profile() {
     case "/profile/account-details":
       componentToRender = <Account />;
       break;
-    case "/profile/address/:id":
+    case "/profile/address":
       componentToRender = <Address />;
       break;
-    case "/profile/wishlist/:id":
+    case "/profile/wishlist":
       componentToRender = <Wishlist />;
       break;
-    case "/profile/orders/:id":
+    case "/profile/orders":
       componentToRender = <Orders />;
       break;
     default:
@@ -121,15 +125,15 @@ export default function Profile() {
       <section className="flex items-center sm:items-start sm:flex-row flex-col mt-20 ">
         <aside className="sm:h-[30rem] w-[17.5rem] py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
           <div className="flex flex-col items-center justify-center mb-6">
-            <div className="relative ">
+            <div className="relative">
               <img
-                src=""
+                src={currentUser?.profilePicture}
                 alt="profile pic"
-                className="w-20 h-20 rounded-full bg-primary"
+                className="w-20 h-20 rounded-full"
               />
               <PiCameraLight className="absolute  -bottom-1 -right-1 text-neutral-01 w-9 h-9 p-2 border-2 rounded-full bg-primary " />
             </div>
-            <h2 className="text-regular-03">Name</h2>
+            <h2 className="text-regular-03">{currentUser?.displayName}</h2>
           </div>
           <div className="relative flex flex-col border-2 rounded-lg border-neutral-04 py-2 pl-4 pr-2 bg-neutral-01 sm:hidden">
             <button

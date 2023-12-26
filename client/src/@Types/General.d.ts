@@ -19,4 +19,5 @@ type UserSchema = {
   oldPassword: string;
   newPassword: string;
   newPassword2: string;
+  profilePicture: string;
 };
