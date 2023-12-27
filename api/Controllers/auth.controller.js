@@ -57,11 +57,12 @@ export const google = async (req, res, next) => {
         .status(200)
         .json(restInfo);
     } else {
+      const hashedPassword = bcryptjs.hashSync(password, 10);
       const newUser = new User({
         email,
         name,
         profilePicture,
-        password,
+        password: hashedPassword,
         username,
       });
       await newUser.save();

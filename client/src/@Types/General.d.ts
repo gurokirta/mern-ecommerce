@@ -15,7 +15,7 @@ type UserSchema = {
   firstName: string;
   secondName: string;
   displayName: string;
-  email: string;
+  email: string | undefined;
   oldPassword: string;
   newPassword: string;
   newPassword2: string;

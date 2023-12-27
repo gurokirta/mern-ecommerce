@@ -9,27 +9,23 @@ import { RootState } from "../Redux/Store";
 import Modal from "./Modal.js";
 
 type googleAuthUserType = {
-  user: {
-    displayName: string;
-    photoURL: string;
-    email: string;
-  };
+  displayName: string | null;
+  photoURL: string | null;
+  email: string | null;
 };
 
 export default function OAuth() {
   const { isError } = useSelector((state: RootState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [googleAuthUser, setGoogleAuthUser] = useState<googleAuthUserType | null>({
-    user: {
-      displayName: "",
-      photoURL: "",
-      email: "",
-    },
+  const [googleAuthUser, setGoogleAuthUser] = useState<googleAuthUserType>({
+    displayName: "",
+    photoURL: "",
+    email: "",
   });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(isError);
+  // console.log(googleAuthUser);
 
   const handleLoginWithGoogle = async () => {
     try {
@@ -38,51 +34,46 @@ export default function OAuth() {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      console.log(result.user);
+      console.log(result.user.email);
       setGoogleAuthUser({
-        user: {
-          displayName: result.user.displayName || "",
-          photoURL: result.user.photoURL || "",
-          email: result.user.email || "",
-        },
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        email: result.user.email,
       });
-      if (result) {
-        console.log("Google authentication works");
-      } else {
-        console.log("Google authentication not works");
+      const res = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: result?.user?.displayName,
+          profilePicture: result?.user?.photoURL,
+          email: result?.user?.email,
+        }),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signInFailed(data.message));
+        return;
       }
+      console.log(result.user);
+      if (isError) {
+        console.log(isError);
+
+        setIsModalOpen(prev => !prev);
+        console.log(googleAuthUser);
+
+        return;
+      }
+      console.log(googleAuthUser);
+      dispatch(signInSuccess(data));
+      navigate("/profile/account-details");
     } catch (error) {
       dispatch(signInFailed(error));
       console.log(error);
     }
   };
 
-  // const handleContinueAuthWithGoogle = async () => {
-  //   try {
-  //     const res = await fetch("/api/auth/google", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         name: googleAuthUser?.user?.displayName,
-  //         profilePicture: googleAuthUser?.user?.photoURL,
-  //         email: googleAuthUser?.user?.email,
-  //       }),
-  //     });
-  //     const data = await res.json();
-  //     if (data.success === false) {
-  //       dispatch(signInFailed(data.message));
-  //       return;
-  //     }
-  //     dispatch(signInSuccess(data));
-
-  //     navigate("/profile/account-details");
-  //   } catch (error) {
-  //     dispatch(signInFailed(error));
-  //     console.log(error);
-  //   }
-  // };
   const handleCloseModal = () => {
     setIsModalOpen(prev => !prev);
   };
@@ -96,7 +87,7 @@ export default function OAuth() {
       >
         <FaGoogle className="text-neutral-01" />
       </button>
-      {isModalOpen && (
+      {isError && isModalOpen && (
         <Modal
           closeModal={handleCloseModal}
           googleAuthUser={googleAuthUser}

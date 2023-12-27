@@ -53,8 +53,6 @@ export default function Profile() {
   const [dropDownTitle, setDropDownTitle] = useState("Account");
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(currentUser?.profilePicture);
-
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();

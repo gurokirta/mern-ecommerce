@@ -8,12 +8,10 @@ import { useFormik } from "formik";
 type propsType = {
   closeModal: () => void;
   googleAuthUser: {
-    user: {
-      displayName: string;
-      photoURL: string;
-      email: string;
-    };
-  } | null;
+    displayName: string | null;
+    photoURL: string | null;
+    email: string | null;
+  };
 };
 
 type FinishGoogleAuthTypes = {
@@ -30,6 +28,7 @@ export default function Modal({ closeModal, googleAuthUser }: propsType) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log(googleAuthUser, "In modal");
   const { values, errors, handleChange, handleSubmit } =
     useFormik<FinishGoogleAuthTypes>({
       initialValues: {
@@ -45,9 +44,9 @@ export default function Modal({ closeModal, googleAuthUser }: propsType) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: googleAuthUser?.user?.displayName,
-              profilePicture: googleAuthUser?.user?.photoURL,
-              email: googleAuthUser?.user?.email,
+              name: googleAuthUser?.displayName || googleAuthUser?.email,
+              profilePicture: googleAuthUser?.photoURL,
+              email: googleAuthUser?.email || "",
               password: values.password,
               username: values.username,
             }),

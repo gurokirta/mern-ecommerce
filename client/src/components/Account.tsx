@@ -12,7 +12,7 @@ const validationSchema = yup.object().shape({
     .string()
     .min(6, "Must be at least 6 characters")
     .max(15, "Max 15 characters only"),
-  email: yup.string().email("Invalid email"),
+  email: yup.string().email("Invalid email").min(1),
   oldPassword: yup.string().required().min(8, "at least 8 characters"),
   newPassword: yup.string().required().min(8, "at least 8 characters"),
   newPassword2: yup
@@ -31,7 +31,7 @@ export default function Account() {
       firstName: "",
       secondName: "",
       displayName: "",
-      email: "",
+      email: currentUser?.email,
       oldPassword: "",
       newPassword: "",
       newPassword2: "",
