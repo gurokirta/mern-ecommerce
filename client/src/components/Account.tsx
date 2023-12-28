@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/Store";
 import { updateFailed, updateStart, updateSuccess } from "../Redux/user/user.slice";
 
+type PropsTypes = {
+  profilePic: string;
+};
+
 const validationSchema = yup.object().shape({
   firstName: yup.string().min(3, "Must be at least 3 characters"),
   secondName: yup.string().min(2, "Must be at least 2 characters"),
@@ -20,10 +24,11 @@ const validationSchema = yup.object().shape({
     .oneOf([yup.ref("newPassword"), ""], "Passwords must match"),
 });
 
-export default function Account() {
+export default function Account({ profilePic }: PropsTypes) {
   const { isLoading, isError, currentUser } = useSelector(
     (state: RootState) => state.user
   );
+  console.log(profilePic);
   const dispatch = useDispatch();
   const { values, errors, handleChange, handleSubmit } = useFormik<UserSchema>({
     initialValues: {
@@ -46,7 +51,7 @@ export default function Account() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(values),
+          body: JSON.stringify({ ...values, profilePicture: profilePic }),
         });
         const data = await res.json();
 

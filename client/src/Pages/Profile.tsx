@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signOutFailed,
@@ -7,6 +7,13 @@ import {
   signOutSuccess,
 } from "../Redux/user/user.slice";
 import { RootState } from "../Redux/Store";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { app } from "../Firebase/firebase";
 import { PiCameraLight } from "react-icons/pi";
 import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
 import Account from "../components/Account";
@@ -52,10 +59,14 @@ export default function Profile() {
   const [profileItem, setProfileItem] = useState(profileInfo);
   const [dropDownTitle, setDropDownTitle] = useState("Account");
   const [isOpen, setIsOpen] = useState(false);
+  const [file, setFile] = useState<undefined | File | null>(undefined);
+  const [profilePic, setProfilePic] = useState<string>("");
 
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const pathname = location.pathname;
 
@@ -89,10 +100,46 @@ export default function Profile() {
     }
   };
 
+  const handleUploadImage = (file: any) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime().toString() + file.name;
+    const storageRef = ref(storage, fileName);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(Math.round(progress));
+      },
+      error => {
+        console.log(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+          setProfilePic(downloadURL);
+        });
+      }
+    );
+  };
+
+  const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files?.item(0);
+    const selectedFile = files;
+    setFile(selectedFile);
+  };
+
+  useEffect(() => {
+    if (file) {
+      handleUploadImage(file);
+    }
+  }, [file]);
+
   let componentToRender: React.ReactNode;
   switch (pathname) {
     case "/profile/account-details":
-      componentToRender = <Account />;
+      componentToRender = <Account profilePic={profilePic} />;
       break;
     case "/profile/address":
       componentToRender = <Address />;
@@ -125,12 +172,20 @@ export default function Profile() {
           <div className="flex flex-col items-center justify-center mb-6">
             <div className="relative">
               <img
-                src={currentUser?.profilePicture}
+                src={currentUser?.profilePicture || profilePic}
                 alt="profile pic"
-                className="w-20 h-20 rounded-full"
+                className="w-20 h-20 rounded-full object-cover"
+                onClick={() => fileRef.current?.click()}
               />
               <PiCameraLight className="absolute  -bottom-1 -right-1 text-neutral-01 w-9 h-9 p-2 border-2 rounded-full bg-primary " />
             </div>
+            <input
+              type="file"
+              ref={fileRef}
+              onChange={e => handleChangeImage(e)}
+              accept="image/*"
+              hidden
+            />
             <h2 className="text-regular-03">{currentUser?.displayName}</h2>
           </div>
           <div className="relative flex flex-col border-2 rounded-lg border-neutral-04 py-2 pl-4 pr-2 bg-neutral-01 sm:hidden">
