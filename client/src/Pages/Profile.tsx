@@ -167,8 +167,8 @@ export default function Profile() {
 
         <h1 className="sm:text-heading-03 text-heading-04">My Account</h1>
       </div>
-      <section className="flex items-center sm:items-start sm:flex-row flex-col mt-20 ">
-        <aside className="sm:h-[30rem] w-[17.5rem] py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
+      <section className="flex sm:items-start sm:flex-row flex-col mt-20 gap-10">
+        <aside className="sm:h-[30rem] w-[17.5rem]  py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
           <div className="flex flex-col items-center justify-center mb-6">
             <div className="relative">
               <img
@@ -251,7 +251,7 @@ export default function Profile() {
             </div>
           </div>
         </aside>
-        <article className="mx-20">{componentToRender}</article>
+        <article className="sm:mx-20">{componentToRender}</article>
       </section>
     </main>
   );

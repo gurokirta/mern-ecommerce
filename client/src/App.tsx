@@ -11,6 +11,7 @@ import Account from "./components/Account";
 import Address from "./components/Address";
 import Wishlist from "./components/Wishlist";
 import Orders from "./components/Orders";
+import PrivateRouter from "./components/PrivateRouter";
 
 function App() {
   return (
@@ -42,28 +43,29 @@ function App() {
             path="/contact-us"
             element={<ContactUs />}
           />
+          <Route element={<PrivateRouter />}>
+            <Route
+              path="/profile"
+              element={<Profile />}
+            >
+              <Route
+                path="/profile/account-details"
+                element={<Account />}
+              />
 
-          <Route
-            path="/profile"
-            element={<Profile />}
-          >
-            <Route
-              path="/profile/account-details"
-              element={<Account />}
-            />
-
-            <Route
-              path="/profile/address"
-              element={<Address />}
-            />
-            <Route
-              path="/profile/wishlist"
-              element={<Wishlist />}
-            />
-            <Route
-              path="/profile/orders"
-              element={<Orders />}
-            />
+              <Route
+                path="/profile/address"
+                element={<Address />}
+              />
+              <Route
+                path="/profile/wishlist"
+                element={<Wishlist />}
+              />
+              <Route
+                path="/profile/orders"
+                element={<Orders />}
+              />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

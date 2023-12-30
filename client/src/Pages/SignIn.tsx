@@ -51,14 +51,7 @@ export default function SignIn() {
 
   return (
     <div className="max-w-xs sm:max-w-full flex flex-col gap-10 sm:flex-row mx-auto">
-      <div className="image sm:w-[46rem] sm:h-screen flex justify-center pt-8 ">
-        <Link
-          to={"/"}
-          className="text-center text-2xl font-medium h-fit"
-        >
-          GG Commerce
-        </Link>
-      </div>
+      <div className="image sm:w-[46rem] sm:h-screen flex justify-center pt-8 "></div>
       <div className="flex flex-col gap-8 sm:w-[28rem] justify-center w-[368px]">
         <div className="flex flex-col gap-6">
           <h1 className="text-heading-04">Sign In</h1>
