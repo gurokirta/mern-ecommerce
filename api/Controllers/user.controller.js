@@ -1,4 +1,5 @@
 import User from "../Models/User.model.js";
+import Address from "../Models/Address.model.js";
 import { errorHandler } from "../Utils/error.js";
 import bcryptjs from "bcryptjs";
 
@@ -44,5 +45,19 @@ export const update = async (req, res, next) => {
     res.status(200).json(restInfo);
   } catch (error) {
     next(error);
+  }
+};
+
+export const getAddress = async (req, res, next) => {
+  if (req.params.id === req.user.id) {
+    try {
+      const billingAddresses = await Address.find({ userRef: req.params.id });
+
+      res.status(200).json(billingAddresses);
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    return next(errorHandler(401, "You can view only your billing addresses"));
   }
 };

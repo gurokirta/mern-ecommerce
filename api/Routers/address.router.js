@@ -5,5 +5,6 @@ import { createAddress } from "../Controllers/address.controller.js";
 const router = express.Router();
 
 router.post("/create", verifyToken, createAddress);
+// router.get("/getAddress/:id", getAddress);
 
 export default router;
