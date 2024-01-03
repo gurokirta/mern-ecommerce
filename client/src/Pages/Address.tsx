@@ -55,7 +55,10 @@ export default function Address() {
               </span>
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div
+              className="flex flex-col gap-1"
+              key={billingAddress._id}
+            >
               <p className="text-regular-06">{billingAddress?.name}</p>
               <p className="text-regular-06">{billingAddress?.phoneNumber}</p>
               <p className="text-regular-06">{billingAddress?.address}</p>

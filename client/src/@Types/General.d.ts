@@ -23,6 +23,7 @@ type UserSchema = {
 };
 
 type BillingAddress = {
+  _id: number;
   name: string;
   phoneNumber: string;
   address: string;
