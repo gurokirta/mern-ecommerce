@@ -7,11 +7,12 @@ import Product from "./Pages/Product";
 import Shop from "./Pages/Shop";
 import ContactUs from "./Pages/ContactUs";
 import Header from "./components/Header";
-import Account from "./components/Account";
-import Address from "./components/Address";
-import Wishlist from "./components/Wishlist";
-import Orders from "./components/Orders";
+import Account from "./Pages/Account";
+import Address from "./Pages/Address";
+import Wishlist from "./Pages/Wishlist";
+import Orders from "./Pages/Orders";
 import PrivateRouter from "./components/PrivateRouter";
+import CreateBillingAddress from "./Pages/CreateBillingAddress";
 
 function App() {
   return (
@@ -50,13 +51,18 @@ function App() {
             >
               <Route
                 path="/profile/account-details"
-                element={<Account />}
+                element={<Account profilePic={""} />}
               />
 
               <Route
                 path="/profile/address"
                 element={<Address />}
-              />
+              >
+                <Route
+                  path="/profile/address/create"
+                  element={<CreateBillingAddress />}
+                />
+              </Route>
               <Route
                 path="/profile/wishlist"
                 element={<Wishlist />}

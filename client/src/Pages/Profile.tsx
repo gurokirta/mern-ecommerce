@@ -16,10 +16,11 @@ import {
 import { app } from "../Firebase/firebase";
 import { PiCameraLight } from "react-icons/pi";
 import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
-import Account from "../components/Account";
-import Wishlist from "../components/Wishlist";
-import Orders from "../components/Orders";
-import Address from "../components/Address";
+import Account from "./Account";
+import Wishlist from "./Wishlist";
+import Orders from "./Orders";
+import Address from "./Address";
+import CreateBillingAddress from "./CreateBillingAddress";
 
 const profileInfo = [
   {
@@ -50,6 +51,13 @@ const profileInfo = [
       activeStatus: false,
     },
   },
+  // {
+  //   item: {
+  //     title: "Create",
+  //     path: "/profile/Address/create",
+  //     activeStatus: false,
+  //   },
+  // },
 ];
 
 export default function Profile() {
@@ -149,6 +157,9 @@ export default function Profile() {
       break;
     case "/profile/orders":
       componentToRender = <Orders />;
+      break;
+    case "/profile/address/create":
+      componentToRender = <CreateBillingAddress />;
       break;
     default:
       componentToRender = <div>Page not found</div>;

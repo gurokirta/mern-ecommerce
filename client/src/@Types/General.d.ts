@@ -21,3 +21,9 @@ type UserSchema = {
   newPassword2: string;
   profilePicture: string;
 };
+
+type BillingAddress = {
+  name: string;
+  phoneNumber: string;
+  address: string;
+};
