@@ -1,10 +1,6 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../Redux/Store";
-import {
-  creatingStart,
-  creatingFailure,
-  creatingSuccess,
-} from "../Redux/address/address.slice";
+
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -23,12 +19,8 @@ type CreateAddressSchema = {
 
 export default function CreateBillingAddress() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { isError, isLoading, billingAddress } = useSelector(
-    (state: RootState) => state.address
-  );
 
   const { errors, values, handleChange, handleSubmit } =
     useFormik<CreateAddressSchema>({
@@ -40,7 +32,6 @@ export default function CreateBillingAddress() {
       validationSchema,
       onSubmit: async (values: CreateAddressSchema) => {
         try {
-          dispatch(creatingStart());
           const res = await fetch("/api/address/create", {
             method: "POST",
             headers: {
@@ -55,13 +46,13 @@ export default function CreateBillingAddress() {
           });
           const data = await res.json();
           if (data.success === false) {
-            dispatch(creatingFailure(data.message));
+            console.log(data.message);
             return;
           }
-          dispatch(creatingSuccess(data));
+
           navigate("/profile/address");
         } catch (error) {
-          dispatch(creatingFailure(error));
+          console.log(error);
         }
       },
     });
