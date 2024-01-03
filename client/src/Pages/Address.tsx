@@ -10,7 +10,6 @@ export default function Address() {
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   const location = useLocation();
-  console.log(location.pathname);
 
   const handleEditMode = () => {
     setIsEditable(prev => !prev);
@@ -28,7 +27,6 @@ export default function Address() {
           return;
         }
         setBillingInfo(data);
-        // console.log(data);
       } catch (error) {
         console.log(error);
       }
