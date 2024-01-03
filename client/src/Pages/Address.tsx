@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
 export default function Address() {
   const [isEditable, setIsEditable] = useState(false);
@@ -48,6 +49,15 @@ export default function Address() {
           )}
         </div>
       </div>
+
+      <Link
+        to="/profile/address/create"
+        className="w-full"
+      >
+        <button className="bg-primary text-neutral-01 text-regular-06 px-3 py-2 border rounded-lg w-full">
+          Create Billing address
+        </button>
+      </Link>
     </div>
   );
 }
