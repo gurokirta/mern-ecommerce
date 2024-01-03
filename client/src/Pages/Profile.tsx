@@ -166,7 +166,7 @@ export default function Profile() {
   }
 
   return (
-    <main className="w-96 sm:w-[100vw] flex flex-col sm:justify-center items-center mt-20 mx-auto">
+    <main className="w-96 sm:w-[100vw] flex flex-col  sm:justify-center items-center mt-20 mx-auto">
       <div className="flex flex-col gap-10">
         <Link
           to={"/"}
@@ -179,7 +179,7 @@ export default function Profile() {
         <h1 className="sm:text-heading-03 text-heading-04">My Account</h1>
       </div>
       <section className="flex sm:items-start sm:flex-row flex-col mt-20 gap-10">
-        <aside className="sm:h-[30rem] w-[17.5rem]  py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
+        <aside className=" sm:h-auto w-72 py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
           <div className="flex flex-col items-center justify-center mb-6">
             <div className="relative">
               <img

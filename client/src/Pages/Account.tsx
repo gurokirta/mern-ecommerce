@@ -67,13 +67,13 @@ export default function Account({ profilePic }: PropsTypes) {
   });
 
   return (
-    <>
+    <div className="sm:max-w-4xl">
       <h1 className="text-regular-03 font-semibold mb-6 mt-10 sm:mt-0">
         Account details
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col w-[17.5rem] sm:w-[44rem]"
+        className="flex flex-col "
       >
         <div className="flex flex-col gap-6 w-full">
           <div className="flex flex-col gap-3 ">
@@ -184,6 +184,6 @@ export default function Account({ profilePic }: PropsTypes) {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
