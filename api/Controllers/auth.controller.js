@@ -44,6 +44,27 @@ export const signin = async (req, res, next) => {
   }
 };
 
+export const signUpAdmin = async (req, res, next) => {
+  const { username, password, email, name, permissions, isAdmin } = req.body;
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+
+  const newUser = new User({
+    name,
+    username,
+    email,
+    password: hashedPassword,
+    isAdmin,
+    permissions,
+  });
+
+  try {
+    await newUser.save();
+    res.status(200).json("Admin created successfully");
+  } catch (error) {
+    next(errorHandler(500, "Created admin failed"));
+  }
+};
+
 export const google = async (req, res, next) => {
   const { email, profilePicture, name, password, username } = req.body;
   const user = await User.findOne({ email });

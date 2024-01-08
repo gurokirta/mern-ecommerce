@@ -43,7 +43,10 @@ export default function Address() {
 
       <div className="flex flex-col gap-6 sm:flex-row sm:grid sm:grid-cols-2 sm:max-w-4xl">
         {billingInfo.map(billingAddress => (
-          <div className="border border-neutral-04 p-4 rounded-lg flex flex-col gap-2">
+          <div
+            key={billingAddress._id}
+            className="border border-neutral-04 p-4 rounded-lg flex flex-col gap-2"
+          >
             <div className="flex justify-between items-center w-full">
               <h2 className="text-regular-07 font-semibold">Billing Address</h2>
               <span
@@ -55,10 +58,7 @@ export default function Address() {
               </span>
             </div>
 
-            <div
-              className="flex flex-col gap-1"
-              key={billingAddress._id}
-            >
+            <div className="flex flex-col gap-1">
               <p className="text-regular-06">{billingAddress?.name}</p>
               <p className="text-regular-06">{billingAddress?.phoneNumber}</p>
               <p className="text-regular-06">{billingAddress?.address}</p>
