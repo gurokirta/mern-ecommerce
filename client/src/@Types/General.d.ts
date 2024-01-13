@@ -20,6 +20,7 @@ type UserSchema = {
   newPassword: string;
   newPassword2: string;
   profilePicture: string;
+  isAdmin: boolean;
 };
 
 type BillingAddress = {

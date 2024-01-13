@@ -13,6 +13,7 @@ import Wishlist from "./Pages/Wishlist";
 import Orders from "./Pages/Orders";
 import PrivateRouter from "./components/PrivateRouter";
 import CreateBillingAddress from "./Pages/CreateBillingAddress";
+import Dashboard from "./Pages/Dashboard";
 
 function App() {
   return (
@@ -45,6 +46,10 @@ function App() {
             element={<ContactUs />}
           />
           <Route element={<PrivateRouter />}>
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
             <Route
               path="/profile"
               element={<Profile />}

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { CiUser } from "react-icons/ci";
+import { RootState } from "../Redux/Store";
 
 const navItems = [
   {
@@ -37,6 +40,7 @@ const navItems = [
 ];
 
 export default function Header() {
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const [items, setItems] = useState(navItems);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -70,9 +74,12 @@ export default function Header() {
           }`}
         ></div>
 
-        <h1 className="text-regular-04 sm:text-regular-01 font-medium">
+        <Link
+          to={"/"}
+          className="text-regular-04 sm:text-regular-01 font-medium"
+        >
           GG Commerce
-        </h1>
+        </Link>
       </div>
 
       {isOpen && (
@@ -140,13 +147,19 @@ export default function Header() {
           />
         </div>
         <div className="hidden sm:block">
-          <Link to={"/profile/account-details"}>
-            <img
-              src="../assets/user-circle.svg"
-              alt="user icon"
-              className="w-5 h-5"
-            />
-          </Link>
+          {currentUser?.isAdmin ? (
+            <Link to={"/dashboard"}>
+              <CiUser className="w-5 h-5" />
+            </Link>
+          ) : (
+            <Link to={"/profile/account-details"}>
+              <img
+                src="../assets/user-circle.svg"
+                alt="user icon"
+                className="w-5 h-5"
+              />
+            </Link>
+          )}
         </div>
         <div className="flex gap-1">
           <img
