@@ -21,61 +21,28 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route
-            path="/"
-            element={<Home />}
-          />
-          <Route
-            path="/sign-in"
-            element={<SignIn />}
-          />
-          <Route
-            path="/sign-up"
-            element={<SignUp />}
-          />
-          <Route
-            path="/shop"
-            element={<Shop />}
-          />
-          <Route
-            path="/product"
-            element={<Product />}
-          />
-          <Route
-            path="/contact-us"
-            element={<ContactUs />}
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route element={<PrivateRouter />}>
-            <Route
-              path="/dashboard"
-              element={<Dashboard />}
-            />
-            <Route
-              path="/profile"
-              element={<Profile />}
-            >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />}>
               <Route
                 path="/profile/account-details"
                 element={<Account profilePic={""} />}
               />
 
-              <Route
-                path="/profile/address"
-                element={<Address />}
-              >
+              <Route path="/profile/address" element={<Address />}>
                 <Route
                   path="/profile/address/create"
                   element={<CreateBillingAddress />}
                 />
               </Route>
-              <Route
-                path="/profile/wishlist"
-                element={<Wishlist />}
-              />
-              <Route
-                path="/profile/orders"
-                element={<Orders />}
-              />
+              <Route path="/profile/wishlist" element={<Wishlist />} />
+              <Route path="/profile/orders" element={<Orders />} />
             </Route>
           </Route>
         </Routes>

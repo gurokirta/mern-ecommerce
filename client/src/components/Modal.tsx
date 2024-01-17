@@ -113,7 +113,7 @@ export default function Modal({ closeModal, googleAuthUser }: propsType) {
         </div>
         <button
           type="submit"
-          onClick={e => handleSubmit()}
+          onClick={(e) => handleSubmit()}
           className="text-secondary-red py-2 px-4 rounded-lg border-secondary-red border hover:bg-secondary-red hover:text-neutral-01 transition-colors mb-10"
         >
           Continue

@@ -46,25 +46,25 @@ export default function Header() {
   const location = useLocation();
 
   const handleBurgerMenu = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   useEffect(() => {
     const pathname = location.pathname;
 
-    setItems(prevItems =>
-      prevItems.map(item => ({
+    setItems((prevItems) =>
+      prevItems.map((item) => ({
         item: {
           ...item.item,
           activityStatus: item.item.link === pathname,
         },
-      }))
+      })),
     );
   }, [location.pathname]);
 
   return (
-    <header className="flex items-center justify-between sm:min-w-full px-40 py-4 mx-auto relative">
-      <div className="relative flex gap-4 items-center">
+    <header className="flex items-center max-w-sm justify-between sm:min-w-full  py-4 sm:px-40 relative mx-auto">
+      <div className="relative flex gap-4 items-center ">
         <div
           onClick={() => handleBurgerMenu()}
           className={`sm:hidden w-[3px] h-6 bg-primary border rotate-90 rounded-lg before:w-[3px] before:h-6 before:bg-primary before:border  before:rounded-lg before:absolute before:-right-2 before:-top-[1px] after:w-[3px] after:h-6 after:bg-primary after:border  after:rounded-lg after:absolute after:-left-2 after:-top-[1px]  ${
@@ -91,12 +91,14 @@ export default function Header() {
           } `}
         >
           <ul className="flex flex-col gap-8">
-            {items.map(navItem => (
+            {items.map((navItem) => (
               <Link
                 to={navItem.item.link}
                 key={navItem.item.title}
                 className={`${
-                  navItem.item.activityStatus ? "text-primary" : "text-neutral-04"
+                  navItem.item.activityStatus
+                    ? "text-primary"
+                    : "text-neutral-04"
                 } text-regular-06 font-medium`}
               >
                 {navItem.item.title}
@@ -125,7 +127,7 @@ export default function Header() {
       )}
       <nav className="hidden sm:flex">
         <ul className="flex gap-6">
-          {items.map(navItem => (
+          {items.map((navItem) => (
             <Link
               to={navItem.item.link}
               key={navItem.item.title}

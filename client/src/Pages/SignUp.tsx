@@ -68,18 +68,12 @@ export default function SignUp() {
           <h1 className="text-heading-04">Sign Up</h1>
           <p className="text-neutral-04 text-regular-05 ">
             Already have an account ?{" "}
-            <Link
-              className="text-secondary-green"
-              to={"/sign-in"}
-            >
+            <Link className="text-secondary-green" to={"/sign-in"}>
               Sing In
             </Link>
           </p>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-8"
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <div className="relative">
             <input
               value={values.name}
@@ -176,14 +170,14 @@ export default function SignUp() {
 
           <div className="flex justify-between items-center">
             <div className="flex gap-2">
-              <input
-                type="checkbox"
-                className=""
-              />
+              <input type="checkbox" className="" />
               <p className="text-neutral-04">
                 I agree with{" "}
-                <span className="font-semibold text-primary">Privacy Policy </span>
-                and <span className="font-semibold text-primary">Terms of Use</span>
+                <span className="font-semibold text-primary">
+                  Privacy Policy{" "}
+                </span>
+                and{" "}
+                <span className="font-semibold text-primary">Terms of Use</span>
               </p>
             </div>
           </div>

@@ -62,7 +62,7 @@ const profileInfo = [
 
 export default function Profile() {
   const { isError, isLoading, currentUser } = useSelector(
-    (state: RootState) => state.user
+    (state: RootState) => state.user,
   );
   const [profileItem, setProfileItem] = useState(profileInfo);
   const [dropDownTitle, setDropDownTitle] = useState("Account");
@@ -79,7 +79,7 @@ export default function Profile() {
   const pathname = location.pathname;
 
   const handleDropDownName = (val: string) => {
-    const paths = profileItem.map(item => item.item.path);
+    const paths = profileItem.map((item) => item.item.path);
     for (let i = 0; i < paths.length; i++) {
       const element = paths[i];
       if (element === pathname) {
@@ -89,7 +89,7 @@ export default function Profile() {
   };
 
   const handleDropDown = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   const handleSignOut = async () => {
@@ -117,18 +117,19 @@ export default function Profile() {
 
     uploadTask.on(
       "state_changed",
-      snapshot => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log(Math.round(progress));
       },
-      error => {
+      (error) => {
         console.log(error);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setProfilePic(downloadURL);
         });
-      }
+      },
     );
   };
 
@@ -166,20 +167,17 @@ export default function Profile() {
   }
 
   return (
-    <main className="w-96 sm:w-[100vw] flex flex-col  sm:justify-center items-center mt-20 mx-auto">
-      <div className="flex flex-col gap-10">
-        <Link
-          to={"/"}
-          className="flex items-center gap-1 sm:hidden"
-        >
+    <main className="w-96 sm:w-[100vw] flex flex-col  sm:justify-center  mt-20 mx-auto">
+      <div className="flex flex-col gap-10 mx-auto">
+        <Link to={"/"} className="flex items-center gap-1 sm:hidden">
           <FaChevronLeft className="text-neutral-04 text-regular-07" />
           <h2 className="text-neutral-04 text-regular-06">Back</h2>
         </Link>
 
         <h1 className="sm:text-heading-03 text-heading-04">My Account</h1>
       </div>
-      <section className="flex sm:items-start sm:flex-row flex-col mt-20 gap-10">
-        <aside className=" sm:h-auto w-72 py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
+      <section className="flex sm:items-start sm:flex-row flex-col mt-20 gap-10 sm:mx-auto">
+        <aside className=" sm:h-auto sm:w-72 max-w-sm py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
           <div className="flex flex-col items-center justify-center mb-6">
             <div className="relative">
               <img
@@ -193,7 +191,7 @@ export default function Profile() {
             <input
               type="file"
               ref={fileRef}
-              onChange={e => handleChangeImage(e)}
+              onChange={(e) => handleChangeImage(e)}
               accept="image/*"
               hidden
             />
@@ -219,13 +217,15 @@ export default function Profile() {
                 }`}
               >
                 <ul className="overflow-hidden flex flex-col justify-center border-2 border-neutral-04 rounded-lg">
-                  {profileItem.map(item => (
+                  {profileItem.map((item) => (
                     <Link
                       to={`${item.item.path}`}
                       key={item.item.title}
                       onClick={() => handleDropDownName(item.item.title)}
                       className={`${
-                        item.item.path === location.pathname ? " text-primary " : ""
+                        item.item.path === location.pathname
+                          ? " text-primary "
+                          : ""
                       } p-2 text-regular-06 font-semibold text-neutral-04`}
                     >
                       <li>{item.item.title}</li>
@@ -237,7 +237,7 @@ export default function Profile() {
           </div>
 
           <div className="flex-col justify-center gap-3 hidden sm:flex">
-            {profileItem.map(item => (
+            {profileItem.map((item) => (
               <Link
                 to={`${item.item.path}`}
                 key={item.item.title}

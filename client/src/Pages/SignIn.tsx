@@ -3,7 +3,11 @@ import type { RootState } from "../Redux/Store";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { signInFailed, signInStart, signInSuccess } from "../Redux/user/user.slice";
+import {
+  signInFailed,
+  signInStart,
+  signInSuccess,
+} from "../Redux/user/user.slice";
 import OAuth from "../components/oauth";
 
 const validationSchema = yup.object().shape({
@@ -19,35 +23,36 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { values, errors, handleChange, handleSubmit } = useFormik<UserLoginSchema>({
-    initialValues: {
-      usernameOrEmail: "",
-      password: "",
-    },
-    validationSchema,
-    onSubmit: async (values: UserLoginSchema) => {
-      try {
-        dispatch(signInStart());
-        const res = await fetch("/api/auth/sign-in", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
-        const data = await res.json();
+  const { values, errors, handleChange, handleSubmit } =
+    useFormik<UserLoginSchema>({
+      initialValues: {
+        usernameOrEmail: "",
+        password: "",
+      },
+      validationSchema,
+      onSubmit: async (values: UserLoginSchema) => {
+        try {
+          dispatch(signInStart());
+          const res = await fetch("/api/auth/sign-in", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          });
+          const data = await res.json();
 
-        if (data.success === false) {
-          dispatch(signInFailed(data.message));
-          return;
+          if (data.success === false) {
+            dispatch(signInFailed(data.message));
+            return;
+          }
+          dispatch(signInSuccess(data));
+          navigate("/");
+        } catch (error) {
+          console.log(error);
         }
-        dispatch(signInSuccess(data));
-        navigate("/");
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
+      },
+    });
 
   return (
     <div className="max-w-xs sm:max-w-full flex flex-col gap-10 sm:flex-row mx-auto">
@@ -57,18 +62,12 @@ export default function SignIn() {
           <h1 className="text-heading-04">Sign In</h1>
           <p className="text-neutral-04 text-regular-05 ">
             Don't have an account ?{" "}
-            <Link
-              className="text-secondary-green"
-              to={"/sign-up"}
-            >
+            <Link className="text-secondary-green" to={"/sign-up"}>
               Sign up
             </Link>
           </p>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-8"
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col  gap-8">
           <div className="relative">
             <input
               id="usernameOrEmail"
@@ -109,16 +108,10 @@ export default function SignIn() {
 
           <div className="flex justify-between items-center">
             <div className="flex gap-2">
-              <input
-                type="checkbox"
-                className=""
-              />
+              <input type="checkbox" className="" />
               <p className="text-neutral-04">Remember me</p>
             </div>
-            <Link
-              to={"/sign-in"}
-              className="text-regular-05"
-            >
+            <Link to={"/sign-in"} className="text-regular-05">
               Forgot password ?
             </Link>
           </div>

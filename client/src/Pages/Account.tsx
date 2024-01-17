@@ -3,7 +3,11 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/Store";
-import { updateFailed, updateStart, updateSuccess } from "../Redux/user/user.slice";
+import {
+  updateFailed,
+  updateStart,
+  updateSuccess,
+} from "../Redux/user/user.slice";
 
 type PropsTypes = {
   profilePic: string;
@@ -26,7 +30,7 @@ const validationSchema = yup.object().shape({
 
 export default function Account({ profilePic }: PropsTypes) {
   const { isLoading, isError, currentUser } = useSelector(
-    (state: RootState) => state.user
+    (state: RootState) => state.user,
   );
   console.log(profilePic);
   const dispatch = useDispatch();
@@ -71,10 +75,7 @@ export default function Account({ profilePic }: PropsTypes) {
       <h1 className="text-regular-03 font-semibold mb-6 mt-10 sm:mt-0">
         Account details
       </h1>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col "
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col ">
         <div className="flex flex-col gap-6 w-full">
           <div className="flex flex-col gap-3 ">
             <label className="text-neutral-04  font-bold uppercase text-regular-06">
@@ -128,8 +129,8 @@ export default function Account({ profilePic }: PropsTypes) {
               className="border rounded-lg h-10 px-4 text-regular-05 font-normal  sm:w-full"
             />
             <span className="text-neutral-04  font-normal text-regular-07">
-              This will be how your name will be displayed in the account section and
-              in reviews
+              This will be how your name will be displayed in the account
+              section and in reviews
             </span>
           </div>
         </div>

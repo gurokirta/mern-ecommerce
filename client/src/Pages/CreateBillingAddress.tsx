@@ -59,10 +59,7 @@ export default function CreateBillingAddress() {
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-3"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           onChange={handleChange}
           value={values.name}

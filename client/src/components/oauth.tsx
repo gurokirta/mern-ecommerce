@@ -2,7 +2,11 @@ import { useState } from "react";
 import { signInWithPopup, getAuth, GoogleAuthProvider } from "firebase/auth";
 import { app } from "../Firebase/firebase.js";
 import { useDispatch, useSelector } from "react-redux";
-import { signInFailed, signInStart, signInSuccess } from "../Redux/user/user.slice";
+import {
+  signInFailed,
+  signInStart,
+  signInSuccess,
+} from "../Redux/user/user.slice";
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../Redux/Store";
@@ -30,7 +34,7 @@ export default function OAuth() {
   const handleLoginWithGoogle = async () => {
     try {
       dispatch(signInStart());
-      setIsModalOpen(prev => !prev);
+      setIsModalOpen((prev) => !prev);
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
@@ -60,7 +64,7 @@ export default function OAuth() {
       if (isError) {
         console.log(isError);
 
-        setIsModalOpen(prev => !prev);
+        setIsModalOpen((prev) => !prev);
         console.log(googleAuthUser);
 
         return;
@@ -75,7 +79,7 @@ export default function OAuth() {
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(prev => !prev);
+    setIsModalOpen((prev) => !prev);
   };
 
   return (
@@ -88,10 +92,7 @@ export default function OAuth() {
         <FaGoogle className="text-neutral-01" />
       </button>
       {isError && isModalOpen && (
-        <Modal
-          closeModal={handleCloseModal}
-          googleAuthUser={googleAuthUser}
-        />
+        <Modal closeModal={handleCloseModal} googleAuthUser={googleAuthUser} />
       )}
     </div>
   );

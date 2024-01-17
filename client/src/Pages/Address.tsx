@@ -11,7 +11,7 @@ export default function Address() {
   const location = useLocation();
 
   const handleEditMode = () => {
-    setIsEditable(prev => !prev);
+    setIsEditable((prev) => !prev);
   };
 
   useEffect(() => {
@@ -38,11 +38,13 @@ export default function Address() {
   return (
     <div className="flex flex-col gap-4 ">
       <div className="">
-        <h1 className="text-regular-07 font-semibold sm:text-regular-03">Address</h1>
+        <h1 className="text-regular-07 font-semibold sm:text-regular-03">
+          Address
+        </h1>
       </div>
 
       <div className="flex flex-col gap-6 sm:flex-row sm:grid sm:grid-cols-2 sm:max-w-4xl">
-        {billingInfo.map(billingAddress => (
+        {billingInfo.map((billingAddress) => (
           <div
             key={billingAddress._id}
             className="border border-neutral-04 p-4 rounded-lg flex flex-col gap-2"
@@ -67,10 +69,7 @@ export default function Address() {
         ))}
       </div>
 
-      <Link
-        to="/profile/address/create"
-        className="w-full"
-      >
+      <Link to="/profile/address/create" className="w-full">
         <button className="bg-primary text-neutral-01 text-regular-06 px-3 py-2 border rounded-lg w-full">
           Create Billing address
         </button>
