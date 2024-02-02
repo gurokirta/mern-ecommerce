@@ -1,14 +1,17 @@
 import { useState, useRef, ChangeEvent, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   signOutStart,
   signOutFailed,
   signOutSuccess,
 } from "../Redux/user/user.slice";
+import {
+  useCreateProductMutation,
+  productApi,
+} from "../Redux/services/fetchData";
 import { useNavigate } from "react-router-dom";
-import * as yup from "yup";
-import { useFormik } from "formik";
 import { app } from "../Firebase/firebase";
+import { RootState } from "../Redux/Store";
 import {
   getStorage,
   ref,
@@ -16,51 +19,25 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 
-const validationSchema = yup.object().shape({
-  title: yup.string().required().min(3, "min 3 char"),
-  description: yup.string().required(),
-  measurements: yup.string().required(),
-  price: yup.number().required(),
-  discountedPrice: yup.number(),
-  category: yup.string().required(),
-  quantity: yup.number().required(),
-  offer: yup.boolean(),
-});
-
 export default function Dashboard() {
-  const { errors, values, handleSubmit, handleChange } = useFormik<Product>({
-    initialValues: {
-      title: "",
-      description: "",
-      measurements: "",
-      price: 0,
-      imageURLs: [],
-      discountedPrice: 0,
-      category: "",
-      quantity: 0,
-      offer: false,
-    },
-    validationSchema,
-    onSubmit: async (values: Product) => {
-      if (values.offer === false) {
-        values.discountedPrice = 0;
-      }
+  const [productApi, { isLoading, isError }] = useCreateProductMutation();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
-      try {
-      } catch (error) {}
-    },
-  });
-
-  const [product, setProduct] = useState({
+  const [product, setProduct] = useState<Product>({
     title: "",
     description: "",
     measurements: "",
     price: 0,
     discountedPrice: 0,
-    imageURLs: [],
+    pictures: [],
+    colors: [],
     category: "",
     quantity: 0,
     offer: false,
+    userRef: currentUser?._id,
   });
 
   const [colors, setColors] = useState([
@@ -85,7 +62,6 @@ export default function Dashboard() {
       active: false,
     },
   ]);
-  const [activeColors, setActiveColors] = useState<string[]>([]);
   const [image, setImage] = useState<File[]>([]);
 
   console.log(product);
@@ -101,14 +77,13 @@ export default function Dashboard() {
       .filter((color) => color.active)
       .map((color) => color.name);
 
-    setActiveColors(colorNames);
+    setProduct((prev) => ({
+      ...prev,
+      colors: colorNames,
+    }));
 
     setColors(updatedColors);
   };
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -130,8 +105,6 @@ export default function Dashboard() {
     if (e.target.files) {
       const selectedImages: File[] = Array.from(e.target.files);
 
-      console.log(selectedImages);
-
       setImage(selectedImages);
     }
   };
@@ -140,7 +113,7 @@ export default function Dashboard() {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
       const fileName = new Date().getTime() + file.name;
-      console.log(fileName);
+
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -164,7 +137,7 @@ export default function Dashboard() {
     });
   };
   const handleUploadImage = () => {
-    if (image.length > 0 && image.length + product.imageURLs.length < 7) {
+    if (image.length > 0 && image.length + product.pictures.length < 7) {
       const promises = [];
 
       for (let i = 0; i < image.length; i++) {
@@ -175,9 +148,8 @@ export default function Dashboard() {
         .then((urls: any) => {
           setProduct((prev) => ({
             ...prev,
-            imageURLs: product.imageURLs.concat(urls),
+            pictures: product.pictures.concat(urls),
           }));
-          console.log(urls);
         })
         .catch((error) => console.log(error));
     } else {
@@ -185,14 +157,75 @@ export default function Dashboard() {
     }
   };
 
-  const handleChangeValue = (e: string) => {
-    console.log(e);
+  const handleChangeValue = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.target.id === "offer" && e.target.type === "checkbox") {
+      setProduct((prev) => ({
+        ...prev,
+        discountedPrice: 0,
+        // @ts-ignore
+        [e.target.id]: e.target.checked,
+      }));
+    }
+    if (e.target.id === "discountedPrice") {
+      setProduct((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+    if (e.target.id === "description") {
+      setProduct((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+    if (e.target.id === "quantity") {
+      setProduct((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+    if (e.target.id === "title") {
+      setProduct((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+    if (e.target.id === "measurements") {
+      setProduct((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+    if (e.target.id === "category") {
+      setProduct((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+    if (e.target.id === "price") {
+      setProduct((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+  };
+
+  const handleSubmitForm = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    try {
+      const res = await productApi(product);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="flex flex-col max-w-sm justify-center gap-8 sm:max-w-lg mx-auto">
       <h1 className="text-heading-07 sm:text-heading-04">Dashboard</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+      <form onSubmit={handleSubmitForm} className="flex flex-col gap-8">
         <div>
           <input
             type="file"
@@ -211,7 +244,7 @@ export default function Dashboard() {
             {" "}
           </div>
           <div className="flex overflow-x-auto">
-            {product.imageURLs.map((url) => (
+            {product.pictures.map((url) => (
               <img src={url} key={url} className="w-20 h-20 object-contain " />
             ))}
           </div>
@@ -225,7 +258,7 @@ export default function Dashboard() {
             id="title"
             type="text"
             value={product.title}
-            onChange={(e) => handleChangeValue(e.target.id)}
+            onChange={(e) => handleChangeValue(e)}
             placeholder="Username or Email"
             className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
           />
@@ -240,8 +273,8 @@ export default function Dashboard() {
           <textarea
             id="description"
             placeholder="Description"
-            value={values.description}
-            onChange={handleChange}
+            value={product.description}
+            onChange={(e) => handleChangeValue(e)}
             className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
           />
           <label
@@ -255,8 +288,8 @@ export default function Dashboard() {
           <input
             id="measurements"
             type="text"
-            value={values.measurements}
-            onChange={handleChange}
+            value={product.measurements}
+            onChange={(e) => handleChangeValue(e)}
             placeholder="Measurements"
             className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
           />
@@ -272,8 +305,8 @@ export default function Dashboard() {
             id="category"
             type="text"
             placeholder="category"
-            value={values.category}
-            onChange={handleChange}
+            value={product.category}
+            onChange={(e) => handleChangeValue(e)}
             className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
           />
           <label
@@ -288,8 +321,8 @@ export default function Dashboard() {
             id="price"
             type="number"
             placeholder="Price"
-            value={values.price}
-            onChange={handleChange}
+            value={product.price}
+            onChange={(e) => handleChangeValue(e)}
             className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
           />
           <label
@@ -300,13 +333,13 @@ export default function Dashboard() {
           </label>
         </div>
 
-        {values.offer === true && (
+        {product.offer === true && (
           <div className="relative flex gap-2 flex-col">
             <input
               id="discountedPrice"
               type="number"
-              value={values.discountedPrice}
-              onChange={handleChange}
+              value={product.discountedPrice}
+              onChange={(e) => handleChangeValue(e)}
               placeholder="Discount"
               className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
             />
@@ -316,12 +349,12 @@ export default function Dashboard() {
             >
               Discount
             </label>
-            {(values.discountedPrice > values.price && (
+            {(product.discountedPrice > product.price && (
               <span className="border rounded-lg text-secondary-red px-2 py-1 mt-2">
                 Discount must be lower then price
               </span>
             )) ||
-              (values.discountedPrice === 0 && (
+              (product.discountedPrice === 0 && (
                 <span className="border rounded-lg text-secondary-red px-2 py-1 mt-2">
                   Discount must be higher then 0
                 </span>
@@ -330,23 +363,31 @@ export default function Dashboard() {
         )}
         <div className="flex gap-3 items-center">
           <span className="text-regular-05 text-neutral-04">Offer: </span>
+
           <input
             type="checkbox"
             name="offer"
             id="offer"
-            checked={values.offer}
-            onChange={handleChange}
+            checked={product.offer}
+            onChange={(e) => handleChangeValue(e)}
           />
         </div>
-
-        <input
-          type="number"
-          name="quantity"
-          id="quantity"
-          value={values.quantity}
-          onChange={handleChange}
-          className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
-        />
+        <div className="relative">
+          <input
+            type="number"
+            name="quantity"
+            id="quantity"
+            value={product.quantity}
+            onChange={(e) => handleChangeValue(e)}
+            className="border-b border-b-neutral-04 pb-2 focus:outline-none  text-regular-05 w-full peer placeholder-transparent"
+          />
+          <label
+            htmlFor="quantity"
+            className="absolute left-0 -top-5 text-regular-07 text-neutral-04 peer-placeholder-shown:text-regular-05 peer-placeholder-shown:text-neutral-04 peer-placeholder-shown:top-[0.5px] transition-all"
+          >
+            Quantity
+          </label>
+        </div>
 
         <h2 className="text-regular-03 text-neutral-04">
           Please choose color:{" "}
@@ -371,9 +412,18 @@ export default function Dashboard() {
               ),
           )}
         </div>
-        <button type="submit">Create</button>
+        <button
+          type="submit"
+          className="border bg-primary text-neutral-03 py-2 px-4 rounded-lg"
+        >
+          Create
+        </button>
       </form>
-      <button type="button" onClick={handleSignOut}>
+      <button
+        type="button"
+        className="border bg-primary text-neutral-03 py-2 px-4 rounded-lg"
+        onClick={handleSignOut}
+      >
         Sign out
       </button>
     </div>

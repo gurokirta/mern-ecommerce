@@ -36,8 +36,10 @@ type Product = {
   measurements: string;
   price: number;
   discountedPrice: number;
-  imageURLs: [];
+  pictures: string[];
+  colors: string[];
   category: string;
   quantity: number;
   offer: boolean;
+  userRef?: number;
 };
