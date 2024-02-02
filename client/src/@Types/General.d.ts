@@ -29,3 +29,15 @@ type BillingAddress = {
   phoneNumber: string;
   address: string;
 };
+
+type Product = {
+  title: string;
+  description: string;
+  measurements: string;
+  price: number;
+  discountedPrice: number;
+  imageURLs: [];
+  category: string;
+  quantity: number;
+  offer: boolean;
+};

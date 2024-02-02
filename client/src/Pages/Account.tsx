@@ -45,6 +45,7 @@ export default function Account({ profilePic }: PropsTypes) {
       newPassword: "",
       newPassword2: "",
       profilePicture: "",
+      isAdmin: false,
     },
     validationSchema,
     onSubmit: async (values: UserSchema) => {
