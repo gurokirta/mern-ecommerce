@@ -14,6 +14,7 @@ import Orders from "./Pages/Orders";
 import PrivateRouter from "./components/PrivateRouter";
 import CreateBillingAddress from "./Pages/CreateBillingAddress";
 import Dashboard from "./Pages/Dashboard";
+import ProductItem from "./Pages/ProductItem";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path="/profile/orders" element={<Orders />} />
             </Route>
           </Route>
+          <Route path="/product/:id" element={<ProductItem />} />
         </Routes>
       </BrowserRouter>
     </div>

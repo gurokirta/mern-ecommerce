@@ -176,6 +176,7 @@ export default function Profile() {
 
         <h1 className="sm:text-heading-03 text-heading-04">My Account</h1>
       </div>
+
       <section className="flex sm:items-start sm:flex-row flex-col mt-20 gap-10 sm:mx-auto">
         <aside className=" sm:h-auto sm:w-72 max-w-sm py-10 px-4 bg-neutral-02  rounded-lg flex flex-col">
           <div className="flex flex-col items-center justify-center mb-6">

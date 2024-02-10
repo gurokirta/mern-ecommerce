@@ -34,7 +34,7 @@ export default function Dashboard() {
     discountedPrice: 0,
     pictures: [],
     colors: [],
-    category: "",
+    category: [],
     quantity: 0,
     offer: false,
     userRef: currentUser?._id,
@@ -157,6 +157,8 @@ export default function Dashboard() {
     }
   };
 
+  console.log(product.category);
+
   const handleChangeValue = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
   ) => {
@@ -201,7 +203,7 @@ export default function Dashboard() {
     if (e.target.id === "category") {
       setProduct((prev) => ({
         ...prev,
-        [e.target.id]: e.target.value,
+        [e.target.id]: e.target.value.split(",").map((str) => str.trim()),
       }));
     }
     if (e.target.id === "price") {

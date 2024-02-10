@@ -38,8 +38,16 @@ type Product = {
   discountedPrice: number;
   pictures: string[];
   colors: string[];
-  category: string;
+  category: string[];
   quantity: number;
   offer: boolean;
+  _id?: number;
+  reviews?: [
+    {
+      value: string;
+      like: number;
+      replies: string[] | string;
+    },
+  ];
   userRef?: number;
 };
