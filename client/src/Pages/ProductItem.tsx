@@ -31,11 +31,11 @@ export default function ProductItem() {
           </div>
         </div>
         <div>
-          <div className="flex flex-col gap-2">
-            {data?.reviews?.map((review) => <p>Review: {review.like}</p>)}
+          <div className="flex flex-col gap-2 ">
+            {data?.reviews?.map((review) => <p> {review.like} Reviews</p>)}
             <h1 className="text-heading-05 text-neutral-07"> {data?.title}</h1>
             {data?.description}
-            <div className="flex gap-2">
+            <div className="flex gap-2 border-b border-neutral-03 pb-4">
               <p className="text-heading-06 text-neutral-07">
                 {" "}
                 ${data?.discountedPrice.toFixed(2)}
@@ -44,7 +44,22 @@ export default function ProductItem() {
                 ${data?.price.toFixed(2)}
               </p>
             </div>
-            {data?.measurements}
+            <div className="flex flex-col mt-4 gap-2 ">
+              <span className="text-neutral-04 text-regular-04">
+                Measurements
+              </span>
+              {data?.measurements}
+            </div>
+            <div>
+              <span className="text-neutral-04 text-regular-04">
+                Choose Color
+              </span>
+              <div className="flex gap-2">
+                {data?.color?.map((color) => (
+                  <div className={`w-8 h-8 rounded-full ${color}`}></div>
+                ))}
+              </div>
+            </div>
           </div>
           <div>
             {currentUser?.isAdmin ? (

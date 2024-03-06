@@ -37,7 +37,7 @@ type Product = {
   price: number;
   discountedPrice: number;
   pictures: string[];
-  colors: string[];
+  color: string[];
   category: string[];
   quantity: number;
   offer: boolean;

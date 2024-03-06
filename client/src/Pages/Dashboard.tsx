@@ -33,7 +33,7 @@ export default function Dashboard() {
     price: 0,
     discountedPrice: 0,
     pictures: [],
-    colors: [],
+    color: [],
     category: [],
     reviews: [
       {
@@ -47,7 +47,7 @@ export default function Dashboard() {
     userRef: currentUser?._id,
   });
 
-  const [colors, setColors] = useState([
+  const [color, setColors] = useState([
     {
       name: "bg-primary",
       active: false,
@@ -73,7 +73,7 @@ export default function Dashboard() {
 
   console.log(product);
   const handleSetActiveColor = (ItemId: string) => {
-    const updatedColors = colors.map((color) => {
+    const updatedColors = color.map((color) => {
       return {
         ...color,
         active: color.name === ItemId ? !color.active : color.active,
@@ -410,7 +410,7 @@ export default function Dashboard() {
           Please choose color:{" "}
         </h2>
         <div className="flex gap-3">
-          {colors.map((color) => (
+          {color.map((color) => (
             <div
               key={color.name}
               onClick={() => handleSetActiveColor(color.name)}
@@ -419,7 +419,7 @@ export default function Dashboard() {
           ))}
         </div>
         <div className="flex gap-2 w-64 h-12  rounded-lg border-neutral-05 border px-3 py-1 ">
-          {colors.map(
+          {color.map(
             (color) =>
               color.active && (
                 <div
