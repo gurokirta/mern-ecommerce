@@ -35,6 +35,13 @@ export default function Dashboard() {
     pictures: [],
     colors: [],
     category: [],
+    reviews: [
+      {
+        value: "",
+        like: 0,
+        replies: "",
+      },
+    ],
     quantity: 0,
     offer: false,
     userRef: currentUser?._id,
@@ -173,7 +180,7 @@ export default function Dashboard() {
     if (e.target.id === "discountedPrice") {
       setProduct((prev) => ({
         ...prev,
-        [e.target.id]: e.target.value,
+        [e.target.id]: parseFloat(e.target.value),
       }));
     }
     if (e.target.id === "description") {
@@ -185,7 +192,7 @@ export default function Dashboard() {
     if (e.target.id === "quantity") {
       setProduct((prev) => ({
         ...prev,
-        [e.target.id]: e.target.value,
+        [e.target.id]: parseFloat(e.target.value),
       }));
     }
     if (e.target.id === "title") {
@@ -209,7 +216,7 @@ export default function Dashboard() {
     if (e.target.id === "price") {
       setProduct((prev) => ({
         ...prev,
-        [e.target.id]: e.target.value,
+        [e.target.id]: parseFloat(e.target.value),
       }));
     }
   };
@@ -241,17 +248,25 @@ export default function Dashboard() {
 
           <div
             onClick={() => fileRef.current?.click()}
-            className="w-10 h-10 bg-primary"
+            className="border rounded-lg h-24"
           >
             {" "}
-          </div>
-          <div className="flex overflow-x-auto">
-            {product.pictures.map((url) => (
-              <img src={url} key={url} className="w-20 h-20 object-contain " />
-            ))}
+            <div className="flex overflow-x-auto p-2">
+              {product.pictures.map((url) => (
+                <img
+                  src={url}
+                  key={url}
+                  className="w-20 h-20 object-contain "
+                />
+              ))}
+            </div>
           </div>
 
-          <button onClick={handleUploadImage} type="button">
+          <button
+            onClick={handleUploadImage}
+            type="button"
+            className="py-3 px-6 bg-primary text-neutral-01 rounded-lg mt-4"
+          >
             Upload
           </button>
         </div>

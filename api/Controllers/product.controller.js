@@ -12,6 +12,7 @@ export const create = async (req, res, next) => {
     color,
     category,
     quantity,
+    reviews,
     offer,
     userRef,
   } = req.body;
@@ -21,11 +22,12 @@ export const create = async (req, res, next) => {
     description,
     measurements,
     price,
-    discountedPrice,
+    discountedPrice: price - discountedPrice,
     pictures,
     color,
     category,
     quantity,
+    reviews,
     offer,
     userRef,
   });

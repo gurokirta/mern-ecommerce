@@ -15,12 +15,14 @@ import PrivateRouter from "./components/PrivateRouter";
 import CreateBillingAddress from "./Pages/CreateBillingAddress";
 import Dashboard from "./Pages/Dashboard";
 import ProductItem from "./Pages/ProductItem";
+import Breadcrumbs from "./components/Breadcrumbs";
 
 function App() {
   return (
     <div className="">
       <BrowserRouter>
         <Header />
+        <Breadcrumbs />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
