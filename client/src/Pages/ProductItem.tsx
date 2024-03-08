@@ -15,14 +15,14 @@ export default function ProductItem() {
   const handleChangeImage = (id: string) => {
     setCurrentImage(id);
   };
-
+  console.log(currentImage);
   return (
     <>
       <div className="max-w-4xl mx-auto flex gap-10">
         <div className="flex flex-col gap-2 relative">
           {data && (
             <img
-              src={currentImage}
+              src={currentImage || data?.pictures[0]}
               alt="pic"
               className="w-96 object-cover h-[500px]"
             />
@@ -37,7 +37,7 @@ export default function ProductItem() {
                 src={pic}
                 onClick={() => handleChangeImage(pic)}
                 alt="pic"
-                className="w-1/2 h-[90px]  object-cover"
+                className="w-1/2 h-[90px] object-cover cursor-pointer"
               />
             ))}
           </div>
