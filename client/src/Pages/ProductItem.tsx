@@ -2,34 +2,40 @@ import { Link, useParams } from "react-router-dom";
 import { useGetProductQuery } from "../Redux/services/fetchData";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/Store";
-import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
+import { useState } from "react";
 
 export default function ProductItem() {
   const params = useParams();
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   const { data, isError, isLoading } = useGetProductQuery(params?.id ?? "");
+  const [currentImage, setCurrentImage] = useState(data?.pictures[0]);
+
+  const handleChangeImage = (id: string) => {
+    setCurrentImage(id);
+  };
 
   return (
     <>
-      <div className="max-w-2xl mx-auto flex gap-10">
+      <div className="max-w-4xl mx-auto flex gap-10">
         <div className="flex flex-col gap-2 relative">
           {data && (
             <img
-              src={data.pictures[0]}
+              src={currentImage}
               alt="pic"
               className="w-96 object-cover h-[500px]"
             />
           )}
-          <div className="flex justify-between absolute w-full mx-10">
-            <FaArrowLeftLong className="bg-neutral-02 text-neutral-05 rounded-2xl w-3" />
-            <FaArrowRightLong className="bg-neutral-02 text-neutral-05 rounded-2xl w-3" />
-          </div>
+          {/* <div className="flex justify-between absolute w-full top-56 px-10">
+            <FaArrowLeftLong className="bg-neutral-02 text-neutral-05 rounded-xl w-8 h-5 cursor-pointer" />
+            <FaArrowRightLong className="bg-neutral-02 text-neutral-05 rounded-xl w-8 h-5 cursor-pointer" />
+          </div> */}
           <div className="flex w-96 gap-2">
             {data?.pictures.map((pic) => (
               <img
                 src={pic}
+                onClick={() => handleChangeImage(pic)}
                 alt="pic"
                 className="w-1/2 h-[90px]  object-cover"
               />
@@ -92,12 +98,6 @@ export default function ProductItem() {
             )}
           </div>
         </div>
-      </div>
-      <FaArrowAltCircleLeft className="bg-neutral-03 text-secondary-red" />
-      <FaArrowAltCircleRight />
-      <div className="flex justify-between absolute">
-        <FaArrowLeftLong className="bg-neutral-02 text-neutral-05 rounded-2xl w-3" />
-        <FaArrowRightLong className="bg-neutral-02 text-neutral-05 rounded-2xl w-3" />
       </div>
     </>
   );
