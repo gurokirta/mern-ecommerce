@@ -15,7 +15,7 @@ export default function ProductItem() {
   const handleChangeImage = (id: string) => {
     setCurrentImage(id);
   };
-  console.log(currentImage);
+  console.log(data?.category.join(","));
   return (
     <>
       <div className="max-w-4xl mx-auto flex gap-10">
@@ -82,10 +82,9 @@ export default function ProductItem() {
               ))}
             </div>
           </div>
-          <div>
+          <div className="border-b border-neutral-03 pb-4">
             {currentUser?.isAdmin ? (
               <div>
-                <p className="text-secondary-red">Admin is here</p>
                 <button className="bg-primary py-2 px-12 border rounded-lg text-neutral-01 w-full">
                   Edit
                 </button>
@@ -97,8 +96,39 @@ export default function ProductItem() {
               </div>
             )}
           </div>
+          <div className="flex justify-between items-center text-neutral-04 ">
+            <span className="text-regular-05">CATEGORY</span>
+            <span className="font-thin">{data?.category.join(",")}</span>
+          </div>
         </div>
       </div>
+      <section className="max-w-4xl mx-auto mt-10 flex flex-col">
+        <header className="mb-10 py-3 border rounded-2xl border-neutral-03 pl-5">
+          <h2 className="text-regular-04">Reviews</h2>
+        </header>
+
+        <div>
+          <h2 className="text-regular-03">Costumer Reviews</h2>
+          <span className="text-regular-06">
+            {data?.reviews?.map((review) => <p> {review.like} Reviews</p>)}
+          </span>
+        </div>
+        <form className="relative">
+          <textarea
+            name=""
+            id=""
+            className="w-full border border-neutral-03 rounded-2xl  text-regular-06 h-16"
+          ></textarea>
+          <button className="absolute bg-primary py-2 px-10 text-neutral-01 rounded-3xl  text-btn-s right-0 top-2 mr-2">
+            Write Review
+          </button>
+        </form>
+        <article>
+          <div>
+            <img src="/assets/try.jpg" alt="" />
+          </div>
+        </article>
+      </section>
     </>
   );
 }
