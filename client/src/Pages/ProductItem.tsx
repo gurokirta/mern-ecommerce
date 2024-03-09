@@ -123,9 +123,54 @@ export default function ProductItem() {
             Write Review
           </button>
         </form>
-        <article>
-          <div>
-            <img src="/assets/try.jpg" alt="" />
+        <article className="flex gap-10 flex-col mt-10">
+          <div className="flex gap-10 border-b border-neutral-03 rounded-3xl p-10 shadow-xl relative">
+            <img
+              src="/assets/try.jpg"
+              alt=""
+              className="w-16 object-cover rounded-full"
+            />
+
+            <div>
+              <h3>jon doe</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
+                fugit.
+              </p>
+            </div>
+            <button className="absolute bottom-10 right-10">Reply</button>
+          </div>
+          <div className="flex gap-10 border-b border-neutral-03 rounded-3xl p-10 shadow-xl relative">
+            <img
+              src="/assets/try.jpg"
+              alt=""
+              className="w-16 object-cover rounded-full"
+            />
+
+            <div>
+              <h3>jon doe</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
+                fugit.
+              </p>
+            </div>
+            <button className="absolute bottom-10 right-10">Reply</button>
+          </div>
+          <div className="flex gap-10 border-b border-neutral-03 rounded-3xl p-10 shadow-xl relative">
+            <img
+              src="/assets/try.jpg"
+              alt=""
+              className="w-16 object-cover rounded-full"
+            />
+
+            <div>
+              <h3>jon doe</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
+                fugit.
+              </p>
+            </div>
+            <button className="absolute bottom-10 right-10">Reply</button>
           </div>
         </article>
       </section>
