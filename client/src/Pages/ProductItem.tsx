@@ -2,7 +2,6 @@ import { Link, useParams } from "react-router-dom";
 import { useGetProductQuery } from "../Redux/services/fetchData";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/Store";
-import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
 import { useState } from "react";
 
 export default function ProductItem() {
@@ -48,7 +47,9 @@ export default function ProductItem() {
             {data?.reviews?.map((review) => <p> {review.like} Reviews</p>)}
           </div>
           <div>
-            <h1 className="text-heading-05 text-neutral-07"> {data?.title}</h1>
+            <h1 className="text-heading-05 text-neutral-07">
+              {data?.title}
+            </h1>
           </div>
           <div>
             <p className="text-regular-06 text-neutral-04">
@@ -117,7 +118,7 @@ export default function ProductItem() {
           <textarea
             name=""
             id=""
-            className="w-full border border-neutral-03 rounded-2xl  text-regular-06 h-16"
+            className="w-full border border-neutral-03 rounded-2xl p-3 text-regular-06 h-16"
           ></textarea>
           <button className="absolute bg-primary py-2 px-10 text-neutral-01 rounded-3xl  text-btn-s right-0 top-2 mr-2">
             Write Review
